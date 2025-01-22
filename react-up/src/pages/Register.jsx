@@ -1,93 +1,141 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRightIcon } from '@heroicons/react/outline'; // Asegúrate de instalar heroicons
-import { motion } from 'framer-motion'; // Asegúrate de instalar framer-motion
+import { motion } from 'framer-motion'; // Animación
+import { FiUserPlus } from 'react-icons/fi'; // Ícono de usuario
+import Swal from 'sweetalert2'; // SweetAlert2
 
 const Register = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // Aquí va la lógica de registro
-    navigate('/dashboard');
-  };
 
-  const handleGoToLogin = () => {
-    navigate('/login');
+    // Validación simple
+    if (!email || !password || !username || !phoneNumber) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Todos los campos son requeridos',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+      return;
+    }
+
+    // Lógica de registro aquí
+
+    Swal.fire({
+      title: 'Registro Exitoso',
+      text: 'Te has registrado correctamente',
+      icon: 'success',
+      confirmButtonText: 'Ir al Dashboard',
+    }).then(() => {
+      navigate('/dashboard'); // Redirigir al dashboard
+    });
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="flex w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-        
-        {/* Formulario a la izquierda */}
-        <div className="w-1/2 p-6 flex flex-col justify-center items-center">
-          <motion.h2
-            className="text-3xl font-semibold text-center text-green-600 mb-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            Crear Cuenta
-          </motion.h2>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-500 to-black">
+      <motion.div
+        className="flex w-full max-w-4xl bg-white rounded-lg shadow-lg"
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+      >
+        {/* Imagen a la derecha, se oculta en pantallas pequeñas */}
+        <div className="hidden sm:block w-1/2 h-full bg-cover bg-center" style={{ backgroundImage: 'url(/img/musica.jpg)' }}>
+          {/* La imagen que se desea mostrar */}
+        </div>
 
-          <form onSubmit={handleRegister} className="w-full max-w-md">
-            <div className="mb-4">
+        {/* Formulario a la izquierda */}
+        <div className="w-full sm:w-1/2 p-8">
+          <h2 className="text-4xl font-bold text-center text-green-700 mb-6">Regístrate</h2>
+          <form onSubmit={handleRegister}>
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+            >
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Nombre de Usuario</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Ingresa tu nombre de usuario"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </motion.div>
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+            >
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Ingresa tu correo electrónico"
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
-            </div>
-            
-            <div className="mb-6">
+            </motion.div>
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+            >
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Número de Teléfono</label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Ingresa tu número de teléfono"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </motion.div>
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+            >
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
-              <input 
-                type="password" 
-                id="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Crea una contraseña"
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
-            </div>
-            
-            <button 
-              type="submit" 
-              className="w-full py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-300 ease-in-out">
-              Crear Cuenta
+            </motion.div>
+            <button type="submit" className="w-full py-3 bg-green-600 text-white rounded-md flex items-center justify-center gap-2 hover:bg-green-700 transition duration-200">
+              <FiUserPlus /> Registrar
             </button>
           </form>
 
-          <div className="mt-6">
-            <p className="text-sm text-gray-600">
-              ¿Ya tienes cuenta? 
-              <button 
-                onClick={handleGoToLogin} 
-                className="text-green-600 font-semibold hover:underline flex items-center gap-2 mt-2">
-                Iniciar sesión 
-                <ArrowRightIcon className="h-5 w-5 text-green-600" />
-              </button>
+          {/* Enlace a la página de login */}
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-500">
+              ¿Ya tienes una cuenta?{' '}
+              <a 
+                href="/login" 
+                className="text-green-600 hover:text-green-700 font-semibold">
+                Inicia sesión aquí
+              </a>
             </p>
           </div>
         </div>
-
-        {/* Imagen a la derecha */}
-        <div className="w-1/2 bg-green-100">
-          <motion.img 
-            src="https://via.placeholder.com/500" // Utiliza una imagen de prueba
-            alt="Imagen de registro"
-            className="w-full h-full object-cover"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          />
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
