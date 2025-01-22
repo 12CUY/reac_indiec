@@ -10,6 +10,9 @@
     "start": "serve dist -s -n -L -p $PORT"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "framer-motion": "^12.0.1",
+    "howler": "^2.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
