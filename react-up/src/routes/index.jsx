@@ -6,9 +6,9 @@ import Dashboard from '../pages/Dashboard';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/" element={<Login />}/>
+      <Route path="/register" element={<Register />}/>
+      <Route path="/dashboard" element={<Dashboard />}/>
     </Routes>
   );
 };
