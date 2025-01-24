@@ -57,12 +57,14 @@ const Navbar = () => {
         {/* Top Bar */}
         <div className="flex justify-between items-center bg-white shadow-md p-4">
           <div></div> {/* Empty for alignment */}
-          
           {/* Content for Mobile and Desktop */}
           <div className="flex items-center space-x-4 md:flex-row flex-col">
             {/* User Info with Dropdown */}
             <div className="relative">
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={toggleDropdown}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={toggleDropdown}
+              >
                 {/* Display user info only on mobile */}
                 <img
                   className="w-10 h-10 rounded-full border-2 border-gray-300"
@@ -78,7 +80,12 @@ const Navbar = () => {
                   <ul className="space-y-2">
                     <h5>gerardo moran</h5>
                     <li>
-                      <a href="/perfil" className="text-gray-800 hover:text-green-500">Perfil</a>
+                      <a
+                        href="/perfil"
+                        className="text-gray-800 hover:text-green-500"
+                      >
+                        Perfil
+                      </a>
                     </li>
                     <li>
                       <button
@@ -120,8 +127,6 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-
-
       </div>
     </div>
   );
