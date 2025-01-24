@@ -70,7 +70,7 @@ const Musica = () => {
   };
 
   return (
-    <body className="cursor hover:cursor-[url('/mano.png'),_pointer]">
+    <body className="cursor hover:cursor-[url('/musicaa.png'),_pointer]">
     <div className="flex-1 ml-0 md:ml-72 ">
       <div className="p-8">
         <p className="text-2xl font-bold mb-4 text-center">Gestión de Música</p>
