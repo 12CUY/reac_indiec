@@ -44,8 +44,26 @@ const Navbar = () => {
               </a>
             </li>
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/eventos" className="flex items-center gap-3">
+              <a href="/grupomusical" className="flex items-center gap-3">
                 <FaUsers size={20} /> Grupo Musical
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a href="/generomusical" className="flex items-center gap-3">
+                <FaHome size={20} /> Genero Musical
+              </a>
+            </li><li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a href="/dashboard" className="flex items-center gap-3">
+                <FaHome size={20} /> Album
+              </a>
+            </li><li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a href="/dashboard" className="flex items-center gap-3">
+                <FaHome size={20} /> Manager
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a href="/dashboard" className="flex items-center gap-3">
+                <FaHome size={20} /> Eventos
               </a>
             </li>
           </ul>

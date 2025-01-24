@@ -5,6 +5,8 @@ import Dashboard from "../pages/Admin/Dashboard";
 import Navbar from "../components/Navbar";
 import Musica from "../pages/Admin/Musica";
 import Eventos from "../pages/Admin/Eventos";
+import GrupoMusical from "../pages/Admin/GrupoMusical";
+import GeneroMusical from "../pages/Admin/GeneroMusica";
 
 const AppRoutes = () => {
   return (
@@ -38,7 +40,47 @@ const AppRoutes = () => {
           </>
         }
       />
+      <Route
+        path="/generomusical"
+        element={
+          <>
+            <Navbar />
+            <GeneroMusical />
+          </>
+        }
+      />
+      <Route
+        path="/grupomusical"
+        element={
+          <>
+            <Navbar />
+            <GrupoMusical/>
+          </>
+        }
+      />
+      <Route
+        path="/generomusical"
+        element={
+          <>
+            <Navbar />
+            <GrupoMusical />
+          </>
+        }
+      />
+      <Route
+        path="/album"
+        element={
+          <>
+            <Navbar />
+            <Dashboard />
+          </>
+        }
+      />
     </Routes>
+    
+    
+    
+      
   );
 };
 
