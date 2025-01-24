@@ -70,6 +70,7 @@ const Musica = () => {
   };
 
   return (
+    <body className="cursor hover:cursor-[url('/mano.png'),_pointer]">
     <div className="flex-1 ml-0 md:ml-72 ">
       <div className="p-8">
         <p className="text-2xl font-bold mb-4 text-center">Gestión de Música</p>
@@ -85,7 +86,7 @@ const Musica = () => {
         </div>
 
         {/* Tabla de Canciones */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto ">
           <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
             <thead className="bg-gray-200">
               <tr>
@@ -223,7 +224,7 @@ const Musica = () => {
           </div>
         )}
       </div>
-    </div>
+    </div></body>
   );
 };
 

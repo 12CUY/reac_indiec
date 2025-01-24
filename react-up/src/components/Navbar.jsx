@@ -33,40 +33,64 @@ const Navbar = () => {
 
           {/* Menu items */}
           <ul className="space-y-6">
-            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/dashboard" className="flex items-center gap-3">
-                <FaHome size={20} /> Dashboard
-              </a>
-            </li>
-            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/music" className="flex items-center gap-3">
-                <FaMusic size={20} /> Música
-              </a>
-            </li>
-            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/grupomusical" className="flex items-center gap-3">
-                <FaUsers size={20} /> Grupo Musical
-              </a>
-            </li>
-            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/generomusical" className="flex items-center gap-3">
-                <FaHome size={20} /> Genero Musical
-              </a>
-            </li><li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/dashboard" className="flex items-center gap-3">
-                <FaHome size={20} /> Album
-              </a>
-            </li><li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/dashboard" className="flex items-center gap-3">
-                <FaHome size={20} /> Manager
-              </a>
-            </li>
-            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a href="/dashboard" className="flex items-center gap-3">
-                <FaHome size={20} /> Eventos
-              </a>
-            </li>
-          </ul>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/dashboard"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaHome size={20} /> Dashboard
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/musica"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaMusic size={20} /> Música
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/grupomusical"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaUsers size={20} /> Grupo Musical
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/generomusical"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaHome size={20} /> Genero Musical
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/album"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaHome size={20} /> Album
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/manager"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaHome size={20} /> Manager
+    </a>
+  </li>
+  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+    <a
+      href="/eventos"
+      className="flex items-center gap-3 hover:cursor-[url('/mano.png'),_pointer]"
+    >
+      <FaHome size={20} /> Eventos
+    </a>
+  </li>
+</ul>
+
         </div>
       </nav>
 

@@ -3,9 +3,11 @@ import AppRoutes from "./routes";
 
 function App() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <div className="cursor-custom"> {/* Aplica la clase global aquí */}
+      <Router>
+        <AppRoutes />
+      </Router>
+    </div>
   );
 }
 

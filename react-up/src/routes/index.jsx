@@ -7,7 +7,8 @@ import Musica from "../pages/Admin/Musica";
 import Eventos from "../pages/Admin/Eventos";
 import GrupoMusical from "../pages/Admin/GrupoMusical";
 import GeneroMusical from "../pages/Admin/GeneroMusica";
-
+import Manager from "../pages/Admin/Manager"
+import Album from "../pages/Admin/Album"
 const AppRoutes = () => {
   return (
     <Routes>
@@ -23,7 +24,7 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/music"
+        path="/musica"
         element={
           <>
             <Navbar />
@@ -58,21 +59,23 @@ const AppRoutes = () => {
           </>
         }
       />
-      <Route
-        path="/generomusical"
+     
+    
+        <Route
+        path="/manager"
         element={
           <>
             <Navbar />
-            <GrupoMusical />
+            <Manager/>
           </>
         }
       />
-      <Route
+         <Route
         path="/album"
         element={
           <>
             <Navbar />
-            <Dashboard />
+            <Album />
           </>
         }
       />
