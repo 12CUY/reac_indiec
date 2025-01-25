@@ -9,6 +9,7 @@ import GrupoMusical from "../pages/Admin/GrupoMusical";
 import GeneroMusical from "../pages/Admin/GeneroMusica";
 import Manager from "../pages/Admin/Manager"
 import Album from "../pages/Admin/Album"
+import Perfil from "../pages/Admin/Perfil"
 const AppRoutes = () => {
   return (
     <Routes>
@@ -79,6 +80,15 @@ const AppRoutes = () => {
           </>
         }
       />
+      <Route
+        path="/perfil"
+        element={
+          <>
+            <Navbar />
+            <Perfil/>
+          </>
+        }
+        />
     </Routes>
     
     
