@@ -1,95 +1,133 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
-import { motion } from "framer-motion"; // Animación
+import { motion } from "framer-motion";
+import { FiEye, FiEdit, FiTrash2, FiRefreshCcw } from "react-icons/fi"; // Añadido el ícono de restaurar
+import PropTypes from "prop-types";
 
+// Componente principal
 const Musica = () => {
   const [canciones, setCanciones] = useState([
-    { nombre: "Canción 1", artista: "Artista 1", genero: "Rock", duracion: "3:45", album: "Álbum 1", activo: true },
-    { nombre: "Canción 2", artista: "Artista 2", genero: "Pop", duracion: "4:10", album: "Álbum 2", activo: true },
+    {
+      nombre: "Canción 1",
+      artista: "Artista 1",
+      genero: "Rock",
+      duracion: "3:45",
+      album: "Álbum 1",
+      imagen: null,
+      activo: true,
+    },
+    {
+      nombre: "Canción 2",
+      artista: "Artista 2",
+      genero: "Pop",
+      duracion: "4:10",
+      album: "Álbum 2",
+      imagen: null,
+      activo: true,
+    },
   ]);
-  const [modalOpen, setModalOpen] = useState(false);
+
+  const [modalCrear, setModalCrear] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalVer, setModalVer] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     artista: "",
     genero: "",
     duracion: "",
     album: "",
+    imagen: null,
   });
+  const [currentCancion, setCurrentCancion] = useState(null);
 
-  // Función para abrir el modal
-  const openModal = () => {
-    setModalOpen(true);
+  const openModalCrear = () => setModalCrear(true);
+  const closeModalCrear = () => setModalCrear(false);
+
+  const openModalEditar = (index) => {
+    setCurrentCancion(index);
+    setFormData(canciones[index]);
+    setModalEditar(true);
   };
+  const closeModalEditar = () => setModalEditar(false);
 
-  // Función para cerrar el modal
-  const closeModal = () => {
-    setModalOpen(false);
+  const openModalVer = (index) => {
+    setCurrentCancion(index);
+    setModalVer(true);
   };
+  const closeModalVer = () => setModalVer(false);
 
-  // Función para manejar el cambio en los inputs del formulario
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, files } = e.target;
+    if (name === "imagen") {
+      setFormData({ ...formData, imagen: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  // Función para agregar una nueva canción
   const handleAddCancion = () => {
     setCanciones([...canciones, { ...formData, activo: true }]);
     Swal.fire({
       icon: "success",
       title: "Canción agregada",
-      text: `La canción ${formData.nombre} fue agregada exitosamente.`,
+      text: `La canción "${formData.nombre}" fue agregada exitosamente.`,
     });
-    closeModal();
+    closeModalCrear();
   };
 
-  // Función para eliminar una canción (desactivarla)
+  const handleUpdateCancion = () => {
+    const updatedCanciones = [...canciones];
+    updatedCanciones[currentCancion] = { ...formData };
+    setCanciones(updatedCanciones);
+    Swal.fire({
+      icon: "success",
+      title: "Canción actualizada",
+      text: `La canción "${formData.nombre}" fue actualizada exitosamente.`,
+    });
+    closeModalEditar();
+  };
+
   const handleDeleteCancion = (index) => {
-    const newCanciones = [...canciones];
-    newCanciones[index].activo = false; // Cambia el estado a desactivado
-    setCanciones(newCanciones);
+    const updatedCanciones = [...canciones];
+    updatedCanciones[index].activo = false;
+    setCanciones(updatedCanciones);
     Swal.fire({
       icon: "error",
-      title: "Canción eliminada",
-      text: "La canción fue desactivada.",
+      title: "Canción desactivada",
+      text: "La canción fue marcada como inactiva.",
     });
   };
 
-  // Función para restaurar una canción (cambiar el estado a activo)
   const handleRestoreCancion = (index) => {
-    const newCanciones = [...canciones];
-    newCanciones[index].activo = true; // Cambia el estado a activo
-    setCanciones(newCanciones);
+    const updatedCanciones = [...canciones];
+    updatedCanciones[index].activo = true;
+    setCanciones(updatedCanciones);
     Swal.fire({
       icon: "success",
       title: "Canción restaurada",
-      text: "La canción fue restaurada.",
+      text: "La canción fue restaurada y está activa nuevamente.",
     });
   };
 
   return (
-    <body className="cursor hover:cursor-[url('/mano.png'),_pointer]">
-    <div className="flex-1 ml-0 md:ml-72 ">
+    <div className="flex-1 ml-0 md:ml-72">
       <div className="p-8">
         <p className="text-2xl font-bold mb-4 text-center">Gestión de Música</p>
 
-        {/* Botón para abrir el modal */}
         <div className="text-center mb-4">
           <button
-            onClick={openModal}
+            onClick={openModalCrear}
             className="bg-blue-500 text-white p-2 rounded-lg"
           >
             Agregar Canción
           </button>
         </div>
 
-        {/* Tabla de Canciones */}
-        <div className="overflow-x-auto ">
+        <div className="overflow-x-auto">
           <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
             <thead className="bg-gray-200">
               <tr>
+                <th className="px-4 py-2">Imagen</th>
                 <th className="px-4 py-2">Nombre</th>
                 <th className="px-4 py-2">Artista</th>
                 <th className="px-4 py-2">Género</th>
@@ -107,8 +145,21 @@ const Musica = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className={`border-t ${cancion.activo ? "hover:bg-gray-100" : "bg-gray-300"}`}
+                  className={`border-t ${
+                    cancion.activo ? "hover:bg-gray-100" : "bg-gray-300"
+                  }`}
                 >
+                  <td className="px-4 py-2">
+                    {cancion.imagen ? (
+                      <img
+                        src={URL.createObjectURL(cancion.imagen)}
+                        alt="Imagen"
+                        className="w-12 h-12 object-cover rounded-md"
+                      />
+                    ) : (
+                      "Sin imagen"
+                    )}
+                  </td>
                   <td className="px-4 py-2">{cancion.nombre}</td>
                   <td className="px-4 py-2">{cancion.artista}</td>
                   <td className="px-4 py-2">{cancion.genero}</td>
@@ -116,28 +167,35 @@ const Musica = () => {
                   <td className="px-4 py-2">{cancion.album}</td>
                   <td className="px-4 py-2">
                     <span
-                      className={`px-3 py-1 rounded-full text-white ${cancion.activo ? "bg-green-500" : "bg-red-500"}`}
+                      className={`px-3 py-1 rounded-full text-white ${
+                        cancion.activo ? "bg-green-500" : "bg-red-500"
+                      }`}
                     >
-                      {cancion.activo ? "Activado" : "Desactivado"}
+                      {cancion.activo ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                  <td className="px-4 py-2">
-                    {cancion.activo ? (
-                      <motion.button
-                        onClick={() => handleDeleteCancion(index)}
-                        className="bg-red-500 text-white p-2 rounded-lg mr-2"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        Eliminar
-                      </motion.button>
-                    ) : (
-                      <motion.button
+                  <td className="px-4 py-2 flex space-x-2">
+                    <FiEye
+                      className="text-blue-500 cursor-pointer"
+                      size={20}
+                      onClick={() => openModalVer(index)}
+                    />
+                    <FiEdit
+                      className="text-yellow-500 cursor-pointer"
+                      size={20}
+                      onClick={() => openModalEditar(index)}
+                    />
+                    <FiTrash2
+                      className="text-red-500 cursor-pointer"
+                      size={20}
+                      onClick={() => handleDeleteCancion(index)}
+                    />
+                    {!cancion.activo && (
+                      <FiRefreshCcw
+                        className="text-green-500 cursor-pointer"
+                        size={20}
                         onClick={() => handleRestoreCancion(index)}
-                        className="bg-green-500 text-white p-2 rounded-lg"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        Restaurar
-                      </motion.button>
+                      />
                     )}
                   </td>
                 </motion.tr>
@@ -146,86 +204,166 @@ const Musica = () => {
           </table>
         </div>
 
-        {/* Modal para agregar una nueva canción */}
-        {modalOpen && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96">
-              <h2 className="text-xl font-bold mb-4">Agregar Canción</h2>
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Nombre</label>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={formData.nombre}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Nombre de la canción"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Artista</label>
-                <input
-                  type="text"
-                  name="artista"
-                  value={formData.artista}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Artista"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Género</label>
-                <input
-                  type="text"
-                  name="genero"
-                  value={formData.genero}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Género"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Duración</label>
-                <input
-                  type="text"
-                  name="duracion"
-                  value={formData.duracion}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Duración (minutos)"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Álbum</label>
-                <input
-                  type="text"
-                  name="album"
-                  value={formData.album}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Álbum"
-                />
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={closeModal}
-                  className="bg-gray-500 text-white p-2 rounded-lg"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleAddCancion}
-                  className="bg-blue-500 text-white p-2 rounded-lg"
-                >
-                  Agregar
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Modales */}
+        {modalCrear && (
+          <ModalFormulario
+            formData={formData}
+            onClose={closeModalCrear}
+            onChange={handleInputChange}
+            onSave={handleAddCancion}
+          />
+        )}
+
+        {modalEditar && (
+          <ModalFormulario
+            formData={formData}
+            onClose={closeModalEditar}
+            onChange={handleInputChange}
+            onSave={handleUpdateCancion}
+          />
+        )}
+
+        {modalVer && (
+          <ModalVer
+            cancion={canciones[currentCancion]}
+            onClose={closeModalVer}
+          />
         )}
       </div>
-    </div></body>
+    </div>
   );
+};
+
+// ModalFormulario
+const ModalFormulario = ({ formData, onClose, onChange, onSave }) => (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">Formulario de Canción</h2>
+      <form>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Nombre</label>
+          <input
+            type="text"
+            name="nombre"
+            value={formData.nombre}
+            onChange={onChange}
+            className="w-full border px-3 py-2 rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Artista</label>
+          <input
+            type="text"
+            name="artista"
+            value={formData.artista}
+            onChange={onChange}
+            className="w-full border px-3 py-2 rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Género</label>
+          <input
+            type="text"
+            name="genero"
+            value={formData.genero}
+            onChange={onChange}
+            className="w-full border px-3 py-2 rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Duración</label>
+          <input
+            type="text"
+            name="duracion"
+            value={formData.duracion}
+            onChange={onChange}
+            className="w-full border px-3 py-2 rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Álbum</label>
+          <input
+            type="text"
+            name="album"
+            value={formData.album}
+            onChange={onChange}
+            className="w-full border px-3 py-2 rounded-lg"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Imagen</label>
+          <input
+            type="file"
+            name="imagen"
+            onChange={onChange}
+            className="w-full"
+          />
+        </div>
+        <div className="flex space-x-2">
+          <button
+            type="button"
+            onClick={onSave}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+
+// ModalVer
+const ModalVer = ({ cancion, onClose }) => (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">Ver Canción</h2>
+      <p><strong>Nombre:</strong> {cancion.nombre}</p>
+      <p><strong>Artista:</strong> {cancion.artista}</p>
+      <p><strong>Género:</strong> {cancion.genero}</p>
+      <p><strong>Duración:</strong> {cancion.duracion}</p>
+      <p><strong>Álbum:</strong> {cancion.album}</p>
+      <div className="mb-4">
+        <strong>Imagen:</strong>
+        {cancion.imagen ? (
+          <img
+            src={URL.createObjectURL(cancion.imagen)}
+            alt="Imagen"
+            className="w-12 h-12 object-cover rounded-md"
+          />
+        ) : (
+          <p>Sin imagen</p>
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={onClose}
+        className="bg-red-500 text-white px-4 py-2 rounded-lg"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+);
+
+// PropTypes para validación de propiedades
+ModalFormulario.propTypes = {
+  formData: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+};
+
+ModalVer.propTypes = {
+  cancion: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Musica;
