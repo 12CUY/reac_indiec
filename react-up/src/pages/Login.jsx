@@ -47,7 +47,9 @@ const Login = () => {
         transition={{ duration: 0.6 }}
       >
         {/* Imagen a la izquierda, oculta en pantallas pequeñas */}
-        <div className="w-1/2 h-full bg-cover bg-center hidden lg:block" style={{  backgroundImage: 'url(/img/musica.jpg)'  }}>
+        <div className="hidden lg:block w-full lg:w-1/2 h-[300px] lg:h-auto bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
+  style={{ backgroundImage: "url('/img/musica.jpg')" }}
+>
         {/* La imagen que se desea mostrar */}
         </div>
 

@@ -46,7 +46,9 @@ const Register = () => {
         transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
       >
         {/* Imagen a la derecha, se oculta en pantallas pequeñas */}
-        <div className="hidden sm:block w-1/2 h-full bg-cover bg-center" style={{ backgroundImage: 'url(/img/musica.jpg)' }}>
+        <div className="hidden lg:block w-full lg:w-1/2 h-[300px] lg:h-auto bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
+  style={{ backgroundImage: "url('/img/piezas.jpg')" }}
+>
           {/* La imagen que se desea mostrar */}
         </div>
 
