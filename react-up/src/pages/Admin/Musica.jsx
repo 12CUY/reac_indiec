@@ -4,26 +4,25 @@ import { motion } from "framer-motion";
 import { FiEye, FiEdit, FiTrash2, FiRefreshCcw } from "react-icons/fi"; // Añadido el ícono de restaurar
 import PropTypes from "prop-types";
 
+
 // Componente principal
 const Musica = () => {
   const [canciones, setCanciones] = useState([
     {
-      nombre: "Canción 1",
-      artista: "Artista 1",
-      genero: "Rock",
-      duracion: "3:45",
+      foto: null,
+      nombreCancion: "Canción 1",
+      nombreArtista: "Artista 1",
+      generoMusical: "Rock",
       album: "Álbum 1",
-      imagen: null,
-      activo: true,
+      estado: "Activo",
     },
     {
-      nombre: "Canción 2",
-      artista: "Artista 2",
-      genero: "Pop",
-      duracion: "4:10",
+      foto: null,
+      nombreCancion: "Canción 2",
+      nombreArtista: "Artista 2",
+      generoMusical: "Pop",
       album: "Álbum 2",
-      imagen: null,
-      activo: true,
+      estado: "Activo",
     },
   ]);
 
@@ -31,12 +30,13 @@ const Musica = () => {
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
   const [formData, setFormData] = useState({
-    nombre: "",
-    artista: "",
-    genero: "",
-    duracion: "",
+    
+    foto: null,
+    nombreCancion: "",
+    nombreArtista: "",
+    generoMusical: "",
     album: "",
-    imagen: null,
+    estado: "Activo",
   });
   const [currentCancion, setCurrentCancion] = useState(null);
 
@@ -58,19 +58,19 @@ const Musica = () => {
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "imagen") {
-      setFormData({ ...formData, imagen: files[0] });
+    if (name === "foto") {
+      setFormData({ ...formData, foto: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
   const handleAddCancion = () => {
-    setCanciones([...canciones, { ...formData, activo: true }]);
+    setCanciones([...canciones, { ...formData }]);
     Swal.fire({
       icon: "success",
       title: "Canción agregada",
-      text: `La canción "${formData.nombre}" fue agregada exitosamente.`,
+      text: `La canción "${formData.nombreCancion}" fue agregada exitosamente.`,
     });
     closeModalCrear();
   };
@@ -82,14 +82,14 @@ const Musica = () => {
     Swal.fire({
       icon: "success",
       title: "Canción actualizada",
-      text: `La canción "${formData.nombre}" fue actualizada exitosamente.`,
+      text: `La canción "${formData.nombreCancion}" fue actualizada exitosamente.`,
     });
     closeModalEditar();
   };
 
   const handleDeleteCancion = (index) => {
     const updatedCanciones = [...canciones];
-    updatedCanciones[index].activo = false;
+    updatedCanciones[index].estado = "Inactivo";
     setCanciones(updatedCanciones);
     Swal.fire({
       icon: "error",
@@ -97,10 +97,9 @@ const Musica = () => {
       text: "La canción fue marcada como inactiva.",
     });
   };
-
   const handleRestoreCancion = (index) => {
     const updatedCanciones = [...canciones];
-    updatedCanciones[index].activo = true;
+    updatedCanciones[index].estado = "Activo";
     setCanciones(updatedCanciones);
     Swal.fire({
       icon: "success",
@@ -127,11 +126,10 @@ const Musica = () => {
           <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
             <thead className="bg-gray-200">
               <tr>
-                <th className="px-4 py-2">Imagen</th>
-                <th className="px-4 py-2">Nombre</th>
-                <th className="px-4 py-2">Artista</th>
-                <th className="px-4 py-2">Género</th>
-                <th className="px-4 py-2">Duración</th>
+                <th className="px-4 py-2">Foto</th>
+                <th className="px-4 py-2">Nombre de la Canción</th>
+                <th className="px-4 py-2">Nombre del Artista</th>
+                <th className="px-4 py-2">Género Musical</th>
                 <th className="px-4 py-2">Álbum</th>
                 <th className="px-4 py-2">Estado</th>
                 <th className="px-4 py-2">Acciones</th>
@@ -145,33 +143,30 @@ const Musica = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className={`border-t ${
-                    cancion.activo ? "hover:bg-gray-100" : "bg-gray-300"
-                  }`}
+                  className={`border-t ${cancion.estado === "Activo" ? "hover:bg-gray-100" : "bg-gray-300"}`}
                 >
                   <td className="px-4 py-2">
-                    {cancion.imagen ? (
+                    {cancion.foto ? (
                       <img
-                        src={URL.createObjectURL(cancion.imagen)}
-                        alt="Imagen"
+                        src={URL.createObjectURL(cancion.foto)}
+                        alt="Foto"
                         className="w-12 h-12 object-cover rounded-md"
                       />
                     ) : (
-                      "Sin imagen"
+                      "Sin foto"
                     )}
                   </td>
-                  <td className="px-4 py-2">{cancion.nombre}</td>
-                  <td className="px-4 py-2">{cancion.artista}</td>
-                  <td className="px-4 py-2">{cancion.genero}</td>
-                  <td className="px-4 py-2">{cancion.duracion}</td>
+                  <td className="px-4 py-2">{cancion.nombreCancion}</td>
+                  <td className="px-4 py-2">{cancion.nombreArtista}</td>
+                  <td className="px-4 py-2">{cancion.generoMusical}</td>
                   <td className="px-4 py-2">{cancion.album}</td>
                   <td className="px-4 py-2">
                     <span
                       className={`px-3 py-1 rounded-full text-white ${
-                        cancion.activo ? "bg-green-500" : "bg-red-500"
+                        cancion.estado === "Activo" ? "bg-green-500" : "bg-red-500"
                       }`}
                     >
-                      {cancion.activo ? "Activo" : "Inactivo"}
+                      {cancion.estado}
                     </span>
                   </td>
                   <td className="px-4 py-2 flex space-x-2">
@@ -185,12 +180,13 @@ const Musica = () => {
                       size={20}
                       onClick={() => openModalEditar(index)}
                     />
-                    <FiTrash2
-                      className="text-red-500 cursor-pointer"
-                      size={20}
-                      onClick={() => handleDeleteCancion(index)}
-                    />
-                    {!cancion.activo && (
+                    {cancion.estado === "Activo" ? (
+                      <FiTrash2
+                        className="text-red-500 cursor-pointer"
+                        size={20}
+                        onClick={() => handleDeleteCancion(index)}
+                      />
+                    ) : (
                       <FiRefreshCcw
                         className="text-green-500 cursor-pointer"
                         size={20}
@@ -241,41 +237,40 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => (
       <h2 className="text-xl font-bold mb-4">Formulario de Canción</h2>
       <form>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Nombre</label>
+          <label className="block text-sm font-medium mb-2">Foto</label>
+          <input
+            type="file"
+            name="foto"
+            onChange={onChange}
+            className="w-full"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Nombre de la Canción</label>
           <input
             type="text"
-            name="nombre"
-            value={formData.nombre}
+            name="nombreCancion"
+            value={formData.nombreCancion}
             onChange={onChange}
             className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Artista</label>
+          <label className="block text-sm font-medium mb-2">Nombre del Artista</label>
           <input
             type="text"
-            name="artista"
-            value={formData.artista}
+            name="nombreArtista"
+            value={formData.nombreArtista}
             onChange={onChange}
             className="w-full border px-3 py-2 rounded-lg"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Género</label>
+          <label className="block text-sm font-medium mb-2">Género Musical</label>
           <input
             type="text"
-            name="genero"
-            value={formData.genero}
-            onChange={onChange}
-            className="w-full border px-3 py-2 rounded-lg"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Duración</label>
-          <input
-            type="text"
-            name="duracion"
-            value={formData.duracion}
+            name="generoMusical"
+            value={formData.generoMusical}
             onChange={onChange}
             className="w-full border px-3 py-2 rounded-lg"
           />
@@ -288,15 +283,6 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => (
             value={formData.album}
             onChange={onChange}
             className="w-full border px-3 py-2 rounded-lg"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Imagen</label>
-          <input
-            type="file"
-            name="imagen"
-            onChange={onChange}
-            className="w-full"
           />
         </div>
         <div className="flex space-x-2">
@@ -325,35 +311,51 @@ const ModalVer = ({ cancion, onClose }) => (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 className="text-xl font-bold mb-4">Ver Canción</h2>
-      <p><strong>Nombre:</strong> {cancion.nombre}</p>
-      <p><strong>Artista:</strong> {cancion.artista}</p>
-      <p><strong>Género:</strong> {cancion.genero}</p>
-      <p><strong>Duración:</strong> {cancion.duracion}</p>
-      <p><strong>Álbum:</strong> {cancion.album}</p>
       <div className="mb-4">
-        <strong>Imagen:</strong>
-        {cancion.imagen ? (
+        <strong>Foto:</strong>
+        {cancion.foto ? (
           <img
-            src={URL.createObjectURL(cancion.imagen)}
-            alt="Imagen"
+            src={URL.createObjectURL(cancion.foto)}
+            alt="Foto"
             className="w-12 h-12 object-cover rounded-md"
           />
         ) : (
-          <p>Sin imagen</p>
+          "Sin foto"
         )}
       </div>
-      <button
-        type="button"
-        onClick={onClose}
-        className="bg-red-500 text-white px-4 py-2 rounded-lg"
-      >
-        Cerrar
-      </button>
+      <div className="mb-4">
+        <strong>Nombre de la Canción:</strong>
+        <p>{cancion.nombreCancion}</p>
+      </div>
+      <div className="mb-4">
+        <strong>Nombre del Artista:</strong>
+        <p>{cancion.nombreArtista}</p>
+      </div>
+      <div className="mb-4">
+        <strong>Género Musical:</strong>
+        <p>{cancion.generoMusical}</p>
+      </div>
+      <div className="mb-4">
+        <strong>Álbum:</strong>
+        <p>{cancion.album}</p>
+      </div>
+      <div className="mb-4">
+        <strong>Estado:</strong>
+        <p>{cancion.estado}</p>
+      </div>
+      <div className="flex justify-end">
+        <button
+          onClick={onClose}
+          className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+        >
+          Cerrar
+        </button>
+      </div>
     </div>
   </div>
 );
 
-// PropTypes para validación de propiedades
+// PropTypes
 ModalFormulario.propTypes = {
   formData: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
