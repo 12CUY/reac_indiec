@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { FaBars, FaTimes, FaHome, FaMusic, FaUsers, FaUserAlt, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaHome,
+  FaMusic,
+  FaUsers,
+  FaUserAlt,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { BiSolidAlbum } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { GiConcentrationOrb } from "react-icons/gi";
@@ -88,9 +96,12 @@ const Navbar = () => {
                 onClick={toggleDropdown}
               >
                 <img
-                  className="w-10 h-10 rounded-full border-2 border-gray-300"
-                  src="https://via.placeholder.com/100"
-                  alt="Usuario"
+                  className="w-10 h-10 rounded-full border-2 border-gray-300 hover:bg-gradient-to-r hover:from-green-500 hover:to-black hover:shadow-lg"
+                  style={{
+                    backgroundImage: "url('/musicaa.png')",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                  }}
                 />
               </div>
 
@@ -101,7 +112,10 @@ const Navbar = () => {
                     <h5 className="font-bold">gerardo moran</h5>
                     <li className="flex items-center gap-2">
                       <FaUserAlt size={16} className="text-gray-600" />
-                      <a href="/perfil" className="text-gray-800 hover:text-green-500">
+                      <a
+                        href="/perfil"
+                        className="text-gray-800 hover:text-green-500"
+                      >
                         Perfil
                       </a>
                     </li>
