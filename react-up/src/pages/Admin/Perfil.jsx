@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Perfil = () => {
   // Estado para almacenar los datos del usuario
   const [userData, setUserData] = useState({
-    name: "Juan Pérez",
-    email: "juanperez@mail.com",
-    phone: "0025455445",
-    location: "Ciudad,Pais",
-    profilePicture: "/img/default-profile.jpg", // Imagen de perfil por defecto
+    name: 'Juan Pérez',
+    email: 'juanperez@mail.com',
+    phone: '0025455445',
+    location: 'Ciudad,Pais', 
+    profilePicture: '/img/default-profile.jpg', // Imagen de perfil por defecto
   });
 
   // Estado para controlar el modo de edición
@@ -51,45 +51,93 @@ const Perfil = () => {
     setShowModal(false);
   };
 
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const images = [
+    { default: "/img/imagen1.jpg", hover: "/img/imagen2.jpg" },
+    { default: "/img/imagen1.jpg", hover: "/img/imagen2.jpg" },
+    { default: "/img/imagen1.jpg", hover: "/img/imagen2.jpg" },
+    { default: "/img/imagen1.jpg", hover: "/img/imagen2.jpg" },
+    { default: "/img/imagen1.jpg", hover: "/img/imagen2.jpg" },
+  ];
+
   return (
     <div className="flex-1 ml-0 md:ml-72">
       {/* Primer bloque de código */}
-      <div className="p-6">
+      <div className="p-0">
         <motion.p
           animate={{ y: [0, -10, 0] }} // Animación de salto
           transition={{ duration: 0.5 }}
-        ></motion.p>
+        >
+        </motion.p>
+      </div>
+
+        {/* Título de bienvenida */}
+      <div className="flex justify-center items-center bg-green-700 py-5">
+       <motion.p
+         className="text-3xl font-semibold text-white"
+         initial={{ opacity: 0 }}  // Empieza invisible
+         animate={{ opacity: 1 }}  // Desvanece a visible
+         transition={{ 
+         duration: 1,  // Duración del desvanecimiento
+         ease: "easeOut",  // Suavizado de la animación
+        delay: 0.3  // Retraso para darle tiempo al resto de los elementos
+        }}
+       >
+         Perfil
+       </motion.p>
       </div>
 
       {/* Segundo bloque de código (Perfil y edición) */}
-      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-500 to-black">
-        <motion.div
-          className="bg-white w-full max-w-4xl p-10 rounded-lg shadow-lg"
+        <div className="flex justify-center items-center bg-gradient-to-r from-green-400 to-teal-800 py-10">
+         <motion.div
+          className="bg-white w-full max-w-3xl p-6 rounded-2xl shadow-xl flex flex-col md:flex-row items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+          transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
         >
-          <div className="flex flex-col items-center mb-10">
-            {/* Título Perfil con tamaño más grande y gradiente */}
-            <img
-              src={userData.profilePicture}
-              className="w-32 h-32 border border-black 500 rounded-full object-cover"
-            />
-          </div>
+          {/* Sección de la imagen de perfil */}
+          <div className="relative flex flex-col items-center md:items-start md:mr-8 mb-4 md:mb-0">
+         <div className="relative w-40 h-40">
+          <img
+          src={userData.profilePicture}
+          className="w-40 h-40 border border-gray-200 rounded-full object-cover mb-4 shadow-md"
+         />
+         {isEditing && (
+         <label
+           htmlFor="profilePicture"
+           className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center rounded-full cursor-pointer text-white transition-opacity duration-200 hover:opacity-60"
+        >
+         <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-10 h-10 mb-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        <span className="text-sm font-medium">Cargar imagen</span>
+      </label>
+      )}
+      <input
+          id="profilePicture"
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+       </div>
+      </div>
 
-          <div className="text-center mb-4">
-            {isEditing ? (
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="mb-4"
-              />
-            ) : null}
-          </div>
-
+          {/* Sección de datos del perfil */}
           <form>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               {/* Columna izquierda: Nombre y Correo */}
               <div>
                 <div className="mb-4">
@@ -108,7 +156,7 @@ const Perfil = () => {
                     value={userData.name}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="w-72 p-3 border border-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     animate={{ y: [0, -10, 0] }} // Animación de salto
                     transition={{ duration: 0.5 }}
                   />
@@ -130,7 +178,7 @@ const Perfil = () => {
                     value={userData.email}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     animate={{ y: [0, -10, 0] }} // Animación de salto
                     transition={{ duration: 0.5 }}
                   />
@@ -156,7 +204,7 @@ const Perfil = () => {
                     value={userData.phone}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     animate={{ y: [0, -10, 0] }} // Animación de salto
                     transition={{ duration: 0.5 }}
                   />
@@ -179,14 +227,13 @@ const Perfil = () => {
                     value={userData.location}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="w-72 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     animate={{ y: [0, -10, 0] }} // Animación de salto
                     transition={{ duration: 0.5 }}
                   />
                 </div>
               </div>
             </div>
-
             <div className="flex justify-center mt-6">
               <motion.button
                 type="button"
@@ -196,7 +243,7 @@ const Perfil = () => {
                 animate={{ y: [0, -10, 0] }} // Animación de salto
                 transition={{ duration: 0.3 }}
               >
-                {isEditing ? "Guardar cambios" : "Editar perfil"}
+                {isEditing ? 'Guardar cambios' : 'Editar perfil'}
               </motion.button>
             </div>
           </form>
@@ -264,93 +311,46 @@ const Perfil = () => {
         </div>
       )}
 
-      {/* Barra blanca con el texto Mis Publicaciones */}
-      <div className="bg-gradient-to-r from-green-500 to-black py-2 flex items-center justify-start">
-        <motion.p
-          className="text-3xl font-semibold text-black text-left"
-          animate={{ y: [0, -10, 0] }} // Animación de salto
-          transition={{ duration: 0.5 }}
-        >
-          Mis Publicaciones
+       {/* Barra blanca con el texto Mis Publicaciones */}
+      <div className="flex justify-center items-center bg-gradient-to-r from-green-400 to-teal-800 py-10">
+       <motion.div
+        className="bg-green-700 p-6 rounded-xl shadow-lg text-center"
+        initial={{ opacity: 0, scale: 0.8 }}  // Inicia con opacidad 0 y escala más pequeña
+        animate={{ opacity: 1, scale: 1 }}    // Se desvanece y expande
+        transition={{ duration: 1, ease: 'easeInOut' }}  // Animación suave
+      >
+      <motion.p
+        className="text-3xl font-semibold text-white"
+        animate={{ y: [30, 0] }}  // Efecto de deslizamiento desde abajo
+        transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}  // Movimiento tipo resorte
+      >
+         Mis Publicaciones
         </motion.p>
+       </motion.div>
       </div>
 
       {/* Tres cuadros en la parte baja con fondo gradiente */}
-      <div className="flex justify-center mt space-x-4 bg-gradient-to-r from-green-500 to-black p-10">
-        {/* Cuadro 1 */}
-        <motion.div
-          className="w-40 h-40 bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.1 }} // Animación de escala al pasar el mouse
-          transition={{ duration: 0.3 }}
-        >
-          <motion.img
-            src="/img/imagen1.jpg"
-            alt="Imagen 1"
-            className="w-full h-full object-cover"
-            whileHover={{ opacity: 0 }} // Hace que la imagen cambie con opacidad
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* Cuadro 2 */}
-        <motion.div
-          className="w-40 h-40 bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.img
-            src="/img/imagen2.jpg"
-            alt="Imagen 2"
-            className="w-full h-full object-cover"
-            whileHover={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* Cuadro 3 */}
-        <motion.div
-          className="w-40 h-40 bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.img
-            src="/img/imagen3.jpg"
-            alt="Imagen 3"
-            className="w-full h-full object-cover"
-            whileHover={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* Cuadro 4 */}
-        <motion.div
-          className="w-40 h-40 bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.img
-            src="/img/imagen4.jpg"
-            alt="Imagen 4"
-            className="w-full h-full object-cover"
-            whileHover={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* Cuadro 5 */}
-        <motion.div
-          className="w-40 h-40 bg-gray-300 rounded-lg overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.img
-            src="/img/imagen5.jpg"
-            alt="Imagen 5"
-            className="w-full h-full object-cover"
-            whileHover={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
+      <div className="flex justify-center items-center bg-gradient-to-r from-green-400 to-teal-800 py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+          {images.map((image, index) => (
+            <motion.div
+              key={index}
+              className="w-full h-60 bg-gray-500 rounded-lg overflow-hidden cursor-pointer"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3 }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <motion.img
+                src={hoveredIndex === index ? image.hover : image.default}
+                alt={'Imagen ${index + 1}'}
+                className="w-full h-full object-cover"
+                animate={{ opacity: [0.8, 1] }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
