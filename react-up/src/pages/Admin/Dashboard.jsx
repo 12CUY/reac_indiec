@@ -112,6 +112,7 @@ const Dashboard = () => {
 
         {/* Contenedor para gráfico de pastel y calendario */}
         <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl">
+          
           {/* Estadísticas */}
           <motion.div
             className="bg-white p-4 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[350px]"
@@ -121,7 +122,7 @@ const Dashboard = () => {
             whileHover={{ scale: 1.05 }}
           >
             <h2 className="text-center text-lg font-semibold mb-4">
-              Estadísticas
+              Estadísticas de la musica
             </h2>
             <div className="text-center">
               <Pie data={data} />
@@ -153,7 +154,7 @@ const Dashboard = () => {
             whileHover={{ scale: 1.05 }}
           >
             <h2 className="text-center text-lg font-semibold mb-4">
-              Calendario
+              Calendario de Eventos
             </h2>
             <div className="text-center">
               <Calendar className="calendar" tileClassName="calendar-tile" />
@@ -163,7 +164,7 @@ const Dashboard = () => {
 
         {/* Notificaciones */}
         <h2 className="text-center text-lg font-semibold w-full max-w-7xl mt-8">
-          Notificaciones
+          Notificaciones de un evento
         </h2>
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {["11-01-2025", "12-02-2025", "15-03-2025"].map((date, index) => (
@@ -190,7 +191,7 @@ const Dashboard = () => {
 
         {/* Top */}
         <h2 className="text-left text-lg font-semibold w-full max-w-7xl mt-8">
-          Top
+          Top Musical
         </h2>
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {songs.map((song) => (
