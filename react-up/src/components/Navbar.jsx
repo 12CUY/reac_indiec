@@ -57,14 +57,7 @@ const Navbar = () => {
       <FaUsers size={20} /> Grupo Musical
     </a>
   </li>
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/generomusical"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaHome size={20} /> Genero Musical
-    </a>
-  </li>
+
   <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
     <a
       href="/album"
