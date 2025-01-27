@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { FaBars, FaTimes, FaHome, FaMusic, FaUsers } from "react-icons/fa";
+import { FaBars, FaTimes, FaHome, FaMusic, FaUsers, FaUserAlt, FaSignOutAlt } from "react-icons/fa";
 import { BiSolidAlbum } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { GiConcentrationOrb } from "react-icons/gi";
+import { Player } from "@lottiefiles/react-lottie-player";
+import logoutAnimation from "../animation/Animation - 1737946669842.json"; // Importa la animación
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showLottie, setShowLottie] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,8 +21,10 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Lógica para cerrar sesión
-    alert("Sesión cerrada");
+    setShowLottie(true); // Muestra la animación
+    setTimeout(() => {
+      window.location.href = "/"; // Redirige después de la animación
+    }, 2000); // Ajusta el tiempo según la duración de la animación
   };
 
   return (
@@ -37,52 +42,33 @@ const Navbar = () => {
           {/* Menu items */}
           <ul className="space-y-6">
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/dashboard"
-                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-              >
+              <a href="/dashboard" className="flex items-center gap-3">
                 <FaHome size={20} /> Dashboard
               </a>
             </li>
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/musica"
-                className="flex items-center gap-3 hover:cursor-[url('/musicaa.png'),_pointer]"
-              >
+              <a href="/musica" className="flex items-center gap-3">
                 <FaMusic size={20} /> Música
               </a>
             </li>
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/grupomusical"
-                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-              >
+              <a href="/grupomusical" className="flex items-center gap-3">
                 <FaUsers size={20} /> Grupo Musical
               </a>
             </li>
-
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/album"
-                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-              >
+              <a href="/album" className="flex items-center gap-3">
                 <BiSolidAlbum size={20} /> Album
               </a>
             </li>
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/manager"
-                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-              >
+              <a href="/manager" className="flex items-center gap-3">
                 <GrUserManager size={20} /> Manager
               </a>
             </li>
             <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-              <a
-                href="/eventos"
-                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-              >
-                <GiConcentrationOrb size={20} /> Eventos
+              <a href="/eventos" className="flex items-center gap-3">
+                <GiConcentrationOrb size={20} /> Evento
               </a>
             </li>
           </ul>
@@ -94,7 +80,6 @@ const Navbar = () => {
         {/* Top Bar */}
         <div className="flex justify-between items-center bg-white shadow-md p-4">
           <div></div> {/* Empty for alignment */}
-          {/* Content for Mobile and Desktop */}
           <div className="flex items-center space-x-4 md:flex-row flex-col">
             {/* User Info with Dropdown */}
             <div className="relative">
@@ -102,29 +87,26 @@ const Navbar = () => {
                 className="flex items-center space-x-2 cursor-pointer"
                 onClick={toggleDropdown}
               >
-                {/* Display user info only on mobile */}
                 <img
                   className="w-10 h-10 rounded-full border-2 border-gray-300"
                   src="https://via.placeholder.com/100"
                   alt="Usuario"
                 />
-                {/* Display user info on desktop */}
               </div>
 
-              {/* Dropdown Menu (only mobile) */}
+              {/* Dropdown Menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg p-4 text-sm">
                   <ul className="space-y-2">
-                    <h5>gerardo moran</h5>
-                    <li>
-                      <a
-                        href="/perfil"
-                        className="text-gray-800 hover:text-green-500"
-                      >
+                    <h5 className="font-bold">gerardo moran</h5>
+                    <li className="flex items-center gap-2">
+                      <FaUserAlt size={16} className="text-gray-600" />
+                      <a href="/perfil" className="text-gray-800 hover:text-green-500">
                         Perfil
                       </a>
                     </li>
-                    <li>
+                    <li className="flex items-center gap-2">
+                      <FaSignOutAlt size={16} className="text-gray-600" />
                       <button
                         onClick={handleLogout}
                         className="text-gray-800 hover:text-green-500 w-full text-left"
@@ -137,7 +119,7 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Notification Button for mobile */}
+            {/* Notification Button */}
             <div className="relative md:mb-0 mb-2">
               <button
                 className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none"
@@ -155,7 +137,7 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Mobile Header - Menu Toggle Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
               className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none md:hidden"
@@ -164,6 +146,18 @@ const Navbar = () => {
             </button>
           </div>
         </div>
+
+        {/* Lottie Animation */}
+        {showLottie && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <Player
+              autoplay
+              loop={false}
+              src={logoutAnimation} // Usamos el archivo importado
+              style={{ height: "300px", width: "300px" }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
