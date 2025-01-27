@@ -1,34 +1,51 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion'; // Animación
-import Swal from 'sweetalert2'; // SweetAlert2
+import { motion } from 'framer-motion';
+import Swal from 'sweetalert2';
 
+const Loading = () => {
+  return (
+    <div className="flex items-center justify-center h-screen bg-gray-100 px-4">
+      <div className="text-center">
+        <div className="border-t-4 border-blue-600 border-solid w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full animate-spin mx-auto"></div>
+        <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-600">Cargando...</p>
+      </div>
+    </div>
+  );
+};
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Datos "quemados" para probar el login
     const validEmail = 'admin@yavirac.edu.ec';
     const validPassword = '12345';
 
-    // Validación simple
     if (email === validEmail && password === validPassword) {
-      // Redirigir al dashboard si las credenciales son correctas
       Swal.fire({
         title: 'Bienvenido',
-        text: 'Has iniciado sesión correctamente',
+        text: 'Datos cargados correctamente',
         icon: 'success',
-        confirmButtonText: 'Ir al Dashboard',
+        confirmButtonText: 'Continuar',
       }).then(() => {
-        navigate('/dashboard'); // Redirigir al dashboard
+        setLoading(true); // Muestra la animación de carga
+
+        setTimeout(() => {
+          setLoading(false); // Detiene la animación de carga
+          setDataLoaded(true); // Muestra el mensaje de datos cargados correctamente
+
+          setTimeout(() => {
+            navigate('/dashboard'); // Redirige al dashboard
+          }, 2000); // Duración para mostrar "¡Datos cargados con éxito!"
+        }, 2000); // Duración de la animación de carga
       });
     } else {
-      // Mostrar un mensaje de error si las credenciales son incorrectas
       Swal.fire({
         title: 'Error',
         text: 'Credenciales incorrectas',
@@ -38,6 +55,20 @@ const Login = () => {
     }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (dataLoaded) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100 px-4">
+        <div className="text-center text-lg sm:text-xl md:text-2xl text-gray-600">
+          ¡Datos cargados con éxito!
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-500 to-black">
       <motion.div
@@ -46,14 +77,11 @@ const Login = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Imagen a la izquierda, oculta en pantallas pequeñas */}
-        <div className="hidden lg:block w-full lg:w-1/2 h-[300px] lg:h-auto bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"
-  style={{ backgroundImage: "url('/img/musica.jpg')" }}
->
-        {/* La imagen que se desea mostrar */}
-        </div>
+        <div
+          className="w-1/2 h-full bg-cover bg-center hidden lg:block"
+          style={{ backgroundImage: 'url(/img/musica.jpg)' }}
+        ></div>
 
-        {/* Formulario a la derecha */}
         <div className="w-full lg:w-1/2 p-8">
           <h2 className="text-4xl font-bold text-center text-green-700 mb-6">Iniciar Sesión</h2>
           <form onSubmit={handleLogin}>
@@ -89,18 +117,18 @@ const Login = () => {
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </motion.div>
-            <button type="submit" className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">
+            <button
+              type="submit"
+              className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+            >
               Iniciar Sesión
             </button>
           </form>
 
-          {/* Enlace a la página de registro */}
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-500">
               ¿No tienes una cuenta?{' '}
-              <a 
-                href="/register" 
-                className="text-green-600 hover:text-green-700 font-semibold">
+              <a href="/register" className="text-green-600 hover:text-green-700 font-semibold">
                 Regístrate aquí
               </a>
             </p>
