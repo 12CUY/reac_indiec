@@ -7,9 +7,9 @@ import Musica from "../pages/Admin/Musica";
 import Eventos from "../pages/Admin/Eventos";
 import GrupoMusical from "../pages/Admin/GrupoMusical";
 
-import Manager from "../pages/Admin/Manager"
-import Album from "../pages/Admin/Album"
-import Perfil from "../pages/Admin/Perfil"
+import Manager from "../pages/Admin/Manager";
+import Album from "../pages/Admin/Album";
+import Perfil from "../pages/Admin/Perfil";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -29,7 +29,7 @@ const AppRoutes = () => {
         element={
           <>
             <Navbar />
-            <Musica/>
+            <Musica />
           </>
         }
       />
@@ -38,33 +38,31 @@ const AppRoutes = () => {
         element={
           <>
             <Navbar />
-            <Eventos/>
+            <Eventos />
           </>
         }
       />
-      
-      
+
       <Route
         path="/grupomusical"
         element={
           <>
             <Navbar />
-            <GrupoMusical/>
+            <GrupoMusical />
           </>
         }
       />
-     
-    
-        <Route
+
+      <Route
         path="/manager"
         element={
           <>
             <Navbar />
-            <Manager/>
+            <Manager />
           </>
         }
       />
-         <Route
+      <Route
         path="/album"
         element={
           <>
@@ -78,15 +76,11 @@ const AppRoutes = () => {
         element={
           <>
             <Navbar />
-            <Perfil/>
+            <Perfil />
           </>
         }
-        />
+      />
     </Routes>
-    
-    
-    
-      
   );
 };
 

@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 const Perfil = () => {
   // Estado para almacenar los datos del usuario
   const [userData, setUserData] = useState({
-    name: 'Juan Pérez',
-    email: 'juanperez@mail.com',
-    phone: '0025455445',
-    location: 'Ciudad,Pais', 
-    profilePicture: '/img/default-profile.jpg', // Imagen de perfil por defecto
+    name: "Juan Pérez",
+    email: "juanperez@mail.com",
+    phone: "0025455445",
+    location: "Ciudad,Pais",
+    profilePicture: "/img/default-profile.jpg", // Imagen de perfil por defecto
   });
 
   // Estado para controlar el modo de edición
@@ -58,8 +58,7 @@ const Perfil = () => {
         <motion.p
           animate={{ y: [0, -10, 0] }} // Animación de salto
           transition={{ duration: 0.5 }}
-        >
-        </motion.p>
+        ></motion.p>
       </div>
 
       {/* Segundo bloque de código (Perfil y edición) */}
@@ -68,11 +67,11 @@ const Perfil = () => {
           className="bg-white w-full max-w-4xl p-10 rounded-lg shadow-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
+          transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
           <div className="flex flex-col items-center mb-10">
             {/* Título Perfil con tamaño más grande y gradiente */}
-           <img
+            <img
               src={userData.profilePicture}
               className="w-32 h-32 border border-black 500 rounded-full object-cover"
             />
@@ -197,7 +196,7 @@ const Perfil = () => {
                 animate={{ y: [0, -10, 0] }} // Animación de salto
                 transition={{ duration: 0.3 }}
               >
-                {isEditing ? 'Guardar cambios' : 'Editar perfil'}
+                {isEditing ? "Guardar cambios" : "Editar perfil"}
               </motion.button>
             </div>
           </form>

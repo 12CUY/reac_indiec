@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import Swal from 'sweetalert2';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const Loading = () => {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100 px-4">
       <div className="text-center">
         <div className="border-t-4 border-blue-600 border-solid w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full animate-spin mx-auto"></div>
-        <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-600">Cargando...</p>
+        <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-600">
+          Cargando...
+        </p>
       </div>
     </div>
   );
@@ -16,23 +18,23 @@ const Loading = () => {
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const validEmail = 'admin@yavirac.edu.ec';
-    const validPassword = '12345';
+    const validEmail = "admin@yavirac.edu.ec";
+    const validPassword = "12345";
 
     if (email === validEmail && password === validPassword) {
       Swal.fire({
-        title: 'Bienvenido',
-        text: 'Datos cargados correctamente',
-        icon: 'success',
-        confirmButtonText: 'Continuar',
+        title: "Bienvenido",
+        text: "Datos cargados correctamente",
+        icon: "success",
+        confirmButtonText: "Continuar",
       }).then(() => {
         setLoading(true); // Muestra la animación de carga
 
@@ -41,16 +43,16 @@ const Login = () => {
           setDataLoaded(true); // Muestra el mensaje de datos cargados correctamente
 
           setTimeout(() => {
-            navigate('/dashboard'); // Redirige al dashboard
+            navigate("/dashboard"); // Redirige al dashboard
           }, 2000); // Duración para mostrar "¡Datos cargados con éxito!"
         }, 2000); // Duración de la animación de carga
       });
     } else {
       Swal.fire({
-        title: 'Error',
-        text: 'Credenciales incorrectas',
-        icon: 'error',
-        confirmButtonText: 'Intentar de nuevo',
+        title: "Error",
+        text: "Credenciales incorrectas",
+        icon: "error",
+        confirmButtonText: "Intentar de nuevo",
       });
     }
   };
@@ -79,19 +81,26 @@ const Login = () => {
       >
         <div
           className="w-1/2 h-full bg-cover bg-center hidden lg:block"
-          style={{ backgroundImage: 'url(/img/musica.jpg)' }}
+          style={{ backgroundImage: "url('/img/musica.jpg')" }}
         ></div>
 
         <div className="w-full lg:w-1/2 p-8">
-          <h2 className="text-4xl font-bold text-center text-green-700 mb-6">Iniciar Sesión</h2>
+          <h2 className="text-4xl font-bold text-center text-green-700 mb-6">
+            Iniciar Sesión
+          </h2>
           <form onSubmit={handleLogin}>
             <motion.div
               className="mb-6"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
             >
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
@@ -105,9 +114,14 @@ const Login = () => {
               className="mb-6"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
             >
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Contraseña
+              </label>
               <input
                 type="password"
                 id="password"
@@ -127,8 +141,11 @@ const Login = () => {
 
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-500">
-              ¿No tienes una cuenta?{' '}
-              <a href="/register" className="text-green-600 hover:text-green-700 font-semibold">
+              ¿No tienes una cuenta?{" "}
+              <a
+                href="/register"
+                className="text-green-600 hover:text-green-700 font-semibold"
+              >
                 Regístrate aquí
               </a>
             </p>

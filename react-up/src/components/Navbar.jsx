@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { FaBars, FaTimes, FaHome, FaMusic, FaUsers } from "react-icons/fa";
+import { BiSolidAlbum } from "react-icons/bi";
+import { GrUserManager } from "react-icons/gr";
+import { GiConcentrationOrb } from "react-icons/gi";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,57 +36,56 @@ const Navbar = () => {
 
           {/* Menu items */}
           <ul className="space-y-6">
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/dashboard"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaHome size={20} /> Dashboard
-    </a>
-  </li>
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/musica"
-      className="flex items-center gap-3 hover:cursor-[url('/musicaa.png'),_pointer]"
-    >
-      <FaMusic size={20} /> Música
-    </a>
-  </li>
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/grupomusical"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaUsers size={20} /> Grupo Musical
-    </a>
-  </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/dashboard"
+                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
+              >
+                <FaHome size={20} /> Dashboard
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/musica"
+                className="flex items-center gap-3 hover:cursor-[url('/musicaa.png'),_pointer]"
+              >
+                <FaMusic size={20} /> Música
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/grupomusical"
+                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
+              >
+                <FaUsers size={20} /> Grupo Musical
+              </a>
+            </li>
 
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/album"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaHome size={20} /> Album
-    </a>
-  </li>
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/manager"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaHome size={20} /> Manager
-    </a>
-  </li>
-  <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
-    <a
-      href="/eventos"
-      className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
-    >
-      <FaHome size={20} /> Eventos
-    </a>
-  </li>
-</ul>
-
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/album"
+                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
+              >
+                <BiSolidAlbum size={20} /> Album
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/manager"
+                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
+              >
+                <GrUserManager size={20} /> Manager
+              </a>
+            </li>
+            <li className="hover:bg-green-500 p-3 rounded-md transition-colors">
+              <a
+                href="/eventos"
+                className="flex items-center gap-3 hover:cursor-[url('/cursor.png'),_pointer]"
+              >
+                <GiConcentrationOrb size={20} /> Eventos
+              </a>
+            </li>
+          </ul>
         </div>
       </nav>
 
