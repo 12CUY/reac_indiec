@@ -44,8 +44,8 @@ const Login = () => {
 
           setTimeout(() => {
             navigate("/dashboard"); // Redirige al dashboard
-          }, 2000); // Duración para mostrar "¡Datos cargados con éxito!"
-        }, 2000); // Duración de la animación de carga
+          }, 200); // Duración para mostrar "¡Datos cargados con éxito!"
+        }, 200); // Duración de la animación de carga
       });
     } else {
       Swal.fire({
@@ -77,7 +77,7 @@ const Login = () => {
         className="flex w-full max-w-4xl bg-white rounded-lg shadow-lg"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.2}}
       >
         <div
           className="hidden lg:block w-full lg:w-1/2 h-[300px] lg:h-auto bg-cover bg-center bg-no-repeat rounded-lg overflow-hidden"

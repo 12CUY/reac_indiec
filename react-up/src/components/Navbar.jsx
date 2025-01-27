@@ -92,7 +92,7 @@ const Navbar = () => {
             {/* User Info with Dropdown */}
             <div className="relative">
               <div
-                className="flex items-center space-x-2 cursor-pointer"
+                className="flex items-center space-x-2 "
                 onClick={toggleDropdown}
               >
                 <img
