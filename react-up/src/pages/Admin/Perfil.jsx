@@ -97,8 +97,8 @@ const Perfil = () => {
           transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
         >
           {/* Sección de la imagen de perfil */}
-          <div className="relative flex flex-col items-center md:items-start md:mr-8 mb-4 md:mb-0">
-         <div className="relative w-40 h-40">
+          <div className=" flex flex-col items-center md:items-start md:mr-8 mb-4 md:mb-0">
+         <div className="  w-40 h-40">
           <img
           src={userData.profilePicture}
           className="w-40 h-40 border border-gray-200 rounded-full object-cover mb-4 shadow-md"
@@ -106,7 +106,7 @@ const Perfil = () => {
          {isEditing && (
          <label
            htmlFor="profilePicture"
-           className="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center rounded-full cursor-pointer text-white transition-opacity duration-200 hover:opacity-60"
+           className="relative inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center rounded-full cursor-pointer text-white transition-opacity duration-200 hover:opacity-60"
         >
          <svg
           xmlns="http://www.w3.org/2000/svg"
