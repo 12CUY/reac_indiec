@@ -84,9 +84,9 @@ const Navbar = () => {
       </nav>
 
       {/* Main content */}
-      <div className="flex-1 ml-0 md:ml-72 bg-gray-100">
+      <div className="flex-1 ml-0 md:ml-72 bg-gradient-to-r from-green-500">
         {/* Top Bar */}
-        <div className="flex justify-between items-center bg-white shadow-md p-4">
+        <div className="flex justify-between items-center bg-gradient-to-r from-black to-green-500 shadow-md p-4">
           <div></div> {/* Empty for alignment */}
           <div className="flex items-center space-x-4 md:flex-row flex-col">
             {/* User Info with Dropdown */}

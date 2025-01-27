@@ -93,7 +93,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex-1 ml-10 md:ml-72 cursor-pointer">
+    <div className="flex-1 ml-10 md:ml-72 cursor-pointer mt-8">
       {/* Fondo blanco */}
       <div className="flex flex-col justify-center items-center min-h-screen  px-4">
         {/* Recuadro horizontal con imagen de fondo */}
