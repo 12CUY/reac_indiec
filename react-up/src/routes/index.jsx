@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import Musica from "../pages/Admin/Musica";
 import Eventos from "../pages/Admin/Eventos";
 import GrupoMusical from "../pages/Admin/GrupoMusical";
-import GeneroMusical from "../pages/Admin/GeneroMusica";
+
 import Manager from "../pages/Admin/Manager"
 import Album from "../pages/Admin/Album"
 import Perfil from "../pages/Admin/Perfil"
@@ -42,15 +42,8 @@ const AppRoutes = () => {
           </>
         }
       />
-      <Route
-        path="/generomusical"
-        element={
-          <>
-            <Navbar />
-            <GeneroMusical />
-          </>
-        }
-      />
+      
+      
       <Route
         path="/grupomusical"
         element={

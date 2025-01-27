@@ -1,9 +1,9 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import { FiEye, FiEdit, FiTrash2, FiRefreshCcw } from "react-icons/fi";
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
 const Eventos = () => {
   const [eventos, setEventos] = useState([
     {
@@ -50,7 +50,7 @@ const Eventos = () => {
 
   const openModalCrear = () => setModalCrear(true);
   const closeModalCrear = () => setModalCrear(false);
-
+  const [searchTerm, setSearchTerm] = useState(""); // barra  de  busqueda
   const openModalEditar = (index) => {
     setCurrentEvento(index);
     setFormData(eventos[index]);
@@ -116,21 +116,127 @@ const Eventos = () => {
       text: "El evento fue restaurado y está activo nuevamente.",
     });
   };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value); // barra  de busqueda
+  };
+  const handleCardClick = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Función en desarrollo",
+      text: "Esta función aún no está implementada.", // funcion del boton tarj
+    });
+  };
 
   return (
-    <div className="flex-1 ml-0 md:ml-72">
-      <div className="p-8">
-        <p className="text-2xl font-bold mb-4 text-center">Gestión de Eventos</p>
+    <div className="p-8">
+      <div
+        className="flex flex-col sm:flex-row md:flex-row items-center justify-between p-4 md:ml-72 text-white rounded-lg"
+        style={{
+          backgroundImage: "url('/public/img/fondo 2.png')", // Usa la ruta relativa de la imagen dentro de public
+          backgroundSize: "cover", // Ajusta para que la imagen cubra todo el contenedor
+          backgroundPosition: "center", // Centra la imagen
+          borderRadius: "20px", // Cambia este valor para ajustar el redondeo
+        }}
+      >
+        {/* Texto "evento" */}
+        <p
+          className="text-center sm:text-left text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
+          style={{
+            fontSize: "clamp(25px, 8vw, 60px)", // Hace que el tamaño de la fuente sea responsivo
+            margin: 0, // Asegura que no haya márgenes adicionales
+          }}
+        >
+          Evento
+        </p>
 
-        <div className="text-center mb-4">
+        {/* Botón "Agregar evento" */}
+        <div className="mt-4 sm:mt-0">
           <button
             onClick={openModalCrear}
-            className="bg-blue-500 text-white p-2 rounded-lg"
+            className="bg-[#0aa5a9] text-white px-6 py-3 rounded-lg transition-transform duration-300 hover:bg-[#067b80] hover:scale-105"
+            style={{
+              fontSize: "18px", // Ajusta el tamaño de la letra aquí
+            }}
           >
             Agregar Evento
           </button>
         </div>
+      </div>
 
+      {/* migajas de pan */}
+      <div
+        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-blue-100 sm:bg-green-100 md:bg-yellow-100 lg:bg-red-100 xl:bg-purple-100 rounded-lg shadow-lg"
+        style={{
+          backgroundColor: "#f1f8f9", // Color de fondo
+          borderRadius: "20px", // Bordes redondeados
+          marginTop: "20px", // Espaciado superior
+          marginBottom: "20px", // Espaciado inferior
+          height: "auto", // Ajusta el tamaño a su contenido
+          padding: "10px", // Ajusta el relleno si es necesario
+        }}
+      >
+        <nav aria-label="breadcrumb">
+          <ol className="flex flex-wrap gap-2 list-none p-0 m-0 justify-center items-center">
+            <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
+              <Link
+                to="/dashboard"
+                className="text-[#0aa5a9] px-4 py-2 rounded-lg transition duration-300 hover:bg-[#067b80] hover:text-white no-underline"
+              >
+                Inicio
+              </Link>
+            </li>
+
+            {/* Separador */}
+            <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
+              <span className="text-[#0aa5a9] px-2">/</span>
+            </li>
+
+            <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
+              <span className="text-[#0aa5a9] px-4 py-2 rounded-lg transition duration-300 hover:bg-[#067b80] hover:text-white no-underline">
+                Evento
+              </span>
+            </li>
+          </ol>
+        </nav>
+      </div>
+
+      {/* Contenedor de búsqueda */}
+      <div
+        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-gray-100 rounded-lg shadow-lg"
+        style={{
+          backgroundColor: "#f1f8f9", // Color de fondo
+          borderRadius: "20px", // Bordes redondeados
+          marginTop: "20px", // Espaciado superior
+          marginBottom: "20px", // Espaciado inferior
+          height: "auto", // Ajusta el tamaño a su contenido
+          padding: "10px", // Ajusta el relleno si es necesario
+        }}
+      >
+        <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-4">
+          {/* Botón al lado izquierdo con hover más opaco */}
+          <button
+            className="bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-300 transition-colors duration-300 w-full sm:w-auto"
+            onClick={handleCardClick}
+          >
+            Tarj.
+          </button>
+          {/* Input con tamaño dinámico */}
+          <input
+            type="text"
+            placeholder="Buscar Evento..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="border border-gray-300 p-2 rounded-lg w-full sm:w-auto sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
+          />
+        </div>
+      </div>
+      {/* Este es  el contedor  que  se encuentra debajo de la tabla de datos  */}
+      <div
+        className="flex-1 ml-0 md:ml-72  p-4 rounded-lg overflow-auto"
+        style={{
+          backgroundColor: "#f1f8f9  ", // Aplica el color de fondo aquí
+        }}
+      >
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
             <thead className="bg-gray-200">
@@ -156,7 +262,9 @@ const Eventos = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className={`border-t ${evento.estado ? "hover:bg-gray-100" : "bg-gray-300"}`}
+                  className={`border-t ${
+                    evento.estado ? "hover:bg-gray-100" : "bg-gray-300"
+                  }`}
                 >
                   <td className="px-4 py-2">
                     {evento.foto ? (
@@ -179,7 +287,9 @@ const Eventos = () => {
                   <td className="px-4 py-2">{evento.artistas}</td>
                   <td className="px-4 py-2">
                     <span
-                      className={`px-3 py-1 rounded-full text-white ${evento.estado ? "bg-green-500" : "bg-red-500"}`}
+                      className={`px-3 py-1 rounded-full text-white ${
+                        evento.estado ? "bg-green-500" : "bg-red-500"
+                      }`}
                     >
                       {evento.estado ? "Activo" : "Inactivo"}
                     </span>
@@ -235,10 +345,7 @@ const Eventos = () => {
         )}
 
         {modalVer && (
-          <ModalVer
-            data={eventos[currentEvento]}
-            onClose={closeModalVer}
-          />
+          <ModalVer data={eventos[currentEvento]} onClose={closeModalVer} />
         )}
       </div>
     </div>
@@ -260,7 +367,9 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
+          <label className="block text-sm font-medium mb-1">
+            Nombre del Evento
+          </label>
           <input
             type="text"
             name="nombreEvento"
@@ -270,7 +379,9 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Género Musical</label>
+          <label className="block text-sm font-medium mb-1">
+            Género Musical
+          </label>
           <input
             type="text"
             name="generoMusical"
@@ -376,11 +487,15 @@ const ModalVer = ({ data, onClose }) => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
+          <label className="block text-sm font-medium mb-1">
+            Nombre del Evento
+          </label>
           <p>{data.nombreEvento}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Género Musical</label>
+          <label className="block text-sm font-medium mb-1">
+            Género Musical
+          </label>
           <p>{data.generoMusical}</p>
         </div>
         <div className="mb-4">
