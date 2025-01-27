@@ -124,7 +124,7 @@ const Album = () => {
       <div
         className="flex flex-col sm:flex-row md:flex-row items-center justify-between p-4 md:ml-72 text-white rounded-lg"
         style={{
-          backgroundImage: "url('/public/img/fondo 2.png')", // Usa la ruta relativa de la imagen dentro de public
+          backgroundImage: "url('/img/dc.jpg')", // Usa la ruta relativa de la imagen dentro de public
           backgroundSize: "cover", // Ajusta para que la imagen cubra todo el contenedor
           backgroundPosition: "center", // Centra la imagen
           borderRadius: "20px", // Cambia este valor para ajustar el redondeo
