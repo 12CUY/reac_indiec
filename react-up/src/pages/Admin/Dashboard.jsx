@@ -56,7 +56,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex-1 ml-0 md:ml-72 cursor-pointer">
+    <div className="flex-1 ml-10 md:ml-72 cursor-pointer">
       {/* Fondo verde a negro */}
       <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-green-500 to-black relative px-4">
         {/* Contenedor para gráfico de pastel y calendario */}

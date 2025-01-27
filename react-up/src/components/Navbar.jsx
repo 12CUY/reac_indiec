@@ -104,7 +104,7 @@ const Navbar = () => {
                 <img
                   className="w-10 h-10 rounded-full border-2 border-gray-300"
                   src="https://via.placeholder.com/100"
-                  alt="User Profile"
+                  alt="Usuario"
                 />
                 {/* Display user info on desktop */}
               </div>
