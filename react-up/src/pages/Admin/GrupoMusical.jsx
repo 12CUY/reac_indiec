@@ -351,15 +351,25 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4">Formulario de Grupo Musical</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Foto</label>
-          <input
-            type="file"
-            name="foto"
-            onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
-          />
-        </div>
+        <div className="mb-4 text-center">
+  <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
+  <div>
+    <label
+      htmlFor="foto"
+      className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
+    >
+      Subir Imagen
+    </label>
+    <input
+      id="foto"
+      type="file"
+      name="foto"
+      onChange={onChange}
+      className="hidden"
+    />
+  </div>
+</div>
+
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">
             Nombre del Grupo
@@ -413,20 +423,21 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             className="border border-gray-300 p-2 rounded-md w-full"
           />
         </div>
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={onClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={onSave}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          >
-            Guardar
-          </button>
-        </div>
+        <div className="flex justify-end">
+  <button
+    onClick={onSave}
+    className="bg-blue-500 text-white p-2 rounded-lg mr-2"
+  >
+    Guardar
+  </button>
+  <button
+    onClick={onClose}
+    className="bg-red-400 text-white p-2 rounded-md"
+  >
+    Cancelar
+  </button>
+</div>
+
       </div>
     </div>
   );
@@ -476,7 +487,8 @@ const ModalVer = ({ data, onClose }) => {
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md"
+            className="bg-purple-500 text-white p-2 rounded-md"
+
           >
             Cerrar
           </button>
