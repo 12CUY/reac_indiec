@@ -281,27 +281,34 @@ const Musica = () => {
                       {cancion.estado}
                     </span>
                   </td>
+                       {/* estilos de los cruds */}
                   <td className="px-4 py-2 flex space-x-2">
                     <FiEye
-                      className="text-blue-500 cursor-pointer"
-                      size={20}
+                      className="bg-gray-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                       onClick={() => openModalVer(index)}
                     />
+
                     <FiEdit
-                      className="text-yellow-500 cursor-pointer"
-                      size={20}
+                      className="bg-yellow-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                       onClick={() => openModalEditar(index)}
                     />
+
                     {cancion.estado === "Activo" ? (
                       <FiTrash2
-                        className="text-red-500 cursor-pointer"
-                        size={20}
+                        className="bg-red-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                        size={40} // Ajusta el tamaño del ícono aquí
+                        style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                         onClick={() => handleDeleteCancion(index)}
                       />
                     ) : (
                       <FiRefreshCcw
-                        className="text-green-500 cursor-pointer"
-                        size={20}
+                        className="bg-[#17a2b8] text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                        size={40} // Ajusta el tamaño del ícono aquí
+                        style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                         onClick={() => handleRestoreCancion(index)}
                       />
                     )}
@@ -348,24 +355,24 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => (
     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
       <h2 className="text-xl font-bold mb-4">Formulario de Canción</h2>
       <form>
-      <div className="mb-4 text-center">
-  <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
-  <div>
-    <label
-      htmlFor="foto"
-      className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
-    >
-      Subir Imagen
-    </label>
-    <input
-      id="foto"
-      type="file"
-      name="foto"
-      onChange={onChange}
-      className="hidden"
-    />
-  </div>
-</div>
+        <div className="mb-4 text-center">
+          <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
+          <div>
+            <label
+              htmlFor="foto"
+              className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
+            >
+              Subir Imagen
+            </label>
+            <input
+              id="foto"
+              type="file"
+              name="foto"
+              onChange={onChange}
+              className="hidden"
+            />
+          </div>
+        </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
@@ -414,20 +421,19 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => (
           />
         </div>
         <div className="flex justify-end">
-  <button
-    onClick={onSave}
-    className="bg-blue-500 text-white p-2 rounded-lg mr-2"
-  >
-    Guardar
-  </button>
-  <button
-    onClick={onClose}
-    className="bg-red-400 text-white p-2 rounded-md"
-  >
-    Cerrar
-  </button>
-</div>
-
+          <button
+            onClick={onSave}
+            className="bg-blue-500 text-white p-2 rounded-lg mr-2"
+          >
+            Guardar
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-red-400 text-white p-2 rounded-md"
+          >
+            Cerrar
+          </button>
+        </div>
       </form>
     </div>
   </div>

@@ -294,28 +294,35 @@ const Eventos = () => {
                       {evento.estado ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                  <td className="px-4 py-2 flex space-x-2">
+                 
+                    {/* estilos de los cruds */}
+                    <td className="px-4 py-2 flex space-x-2">
                     <FiEye
-                      className="text-blue-500 cursor-pointer"
-                      size={20}
+                      className="bg-gray-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                       onClick={() => openModalVer(index)}
                     />
+
                     <FiEdit
-                      className="text-yellow-500 cursor-pointer"
-                      size={20}
+                      className="bg-yellow-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
                       onClick={() => openModalEditar(index)}
                     />
                     {evento.estado ? (
                       <FiTrash2
-                        className="text-red-500 cursor-pointer"
-                        size={20}
-                        onClick={() => handleDeleteEvento(index)}
+                      className="bg-red-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                      onClick={() => handleDeleteEvento(index)}
                       />
                     ) : (
                       <FiRefreshCcw
-                        className="text-green-500 cursor-pointer"
-                        size={20}
-                        onClick={() => handleRestoreEvento(index)}
+                      className="bg-[#17a2b8] text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
+                      size={40} // Ajusta el tamaño del ícono aquí
+                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                      onClick={() => handleRestoreEvento(index)}
                       />
                     )}
                   </td>
