@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import { FiEye, FiEdit, FiTrash2, FiRefreshCcw } from "react-icons/fi";
+import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiSearch, FiDownload } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import * as XLSX from "xlsx";
+
 const GrupoMusical = () => {
   const [grupos, setGrupos] = useState([
     {
@@ -38,23 +40,60 @@ const GrupoMusical = () => {
     url: "",
   });
   const [currentGrupo, setCurrentGrupo] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const openModalCrear = () => setModalCrear(true);
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Handle export to Excel
+  const handleExportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredGrupos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Grupos Musicales");
+    XLSX.writeFile(workbook, "grupos_musicales.xlsx");
+  };
+
+  // Filter grupos based on search term
+  const filteredGrupos = grupos.filter((grupo) =>
+    grupo.nombreGrupo.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Open and close modals
+  const openModalCrear = () => {
+    setFormData({
+      foto: null,
+      nombreGrupo: "",
+      generoMusical: "",
+      descripcion: "",
+      plataforma: "",
+      url: "",
+    });
+    setErrors({});
+    setModalCrear(true);
+  };
+
   const closeModalCrear = () => setModalCrear(false);
-  const [searchTerm, setSearchTerm] = useState(""); // barra  de  busqueda
+
   const openModalEditar = (index) => {
     setCurrentGrupo(index);
     setFormData(grupos[index]);
+    setErrors({});
     setModalEditar(true);
   };
+
   const closeModalEditar = () => setModalEditar(false);
 
   const openModalVer = (index) => {
     setCurrentGrupo(index);
     setModalVer(true);
   };
+
   const closeModalVer = () => setModalVer(false);
 
+  // Handle input changes in the form
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "foto") {
@@ -64,7 +103,21 @@ const GrupoMusical = () => {
     }
   };
 
+  // Validate form fields
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nombreGrupo) newErrors.nombreGrupo = "El nombre del grupo es obligatorio.";
+    if (!formData.generoMusical) newErrors.generoMusical = "El género musical es obligatorio.";
+    if (!formData.descripcion) newErrors.descripcion = "La descripción es obligatoria.";
+    if (!formData.plataforma) newErrors.plataforma = "La plataforma es obligatoria.";
+    if (!formData.url) newErrors.url = "La URL es obligatoria.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Add a new grupo
   const handleAddGrupo = () => {
+    if (!validateForm()) return;
     setGrupos([...grupos, { ...formData, activo: true }]);
     Swal.fire({
       icon: "success",
@@ -74,7 +127,9 @@ const GrupoMusical = () => {
     closeModalCrear();
   };
 
+  // Update an existing grupo
   const handleUpdateGrupo = () => {
+    if (!validateForm()) return;
     const updatedGrupos = [...grupos];
     updatedGrupos[currentGrupo] = { ...formData };
     setGrupos(updatedGrupos);
@@ -86,6 +141,7 @@ const GrupoMusical = () => {
     closeModalEditar();
   };
 
+  // Delete (deactivate) a grupo
   const handleDeleteGrupo = (index) => {
     const updatedGrupos = [...grupos];
     updatedGrupos[index].activo = false;
@@ -97,6 +153,7 @@ const GrupoMusical = () => {
     });
   };
 
+  // Restore (activate) a grupo
   const handleRestoreGrupo = (index) => {
     const updatedGrupos = [...grupos];
     updatedGrupos[index].activo = true;
@@ -107,62 +164,51 @@ const GrupoMusical = () => {
       text: "El grupo fue restaurado y está activo nuevamente.",
     });
   };
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value); // barra  de busqueda
-  };
-  const handleCardClick = () => {
-    Swal.fire({
-      icon: "info",
-      title: "Función en desarrollo",
-      text: "Esta función aún no está implementada.", // funcion del boton tarj
-    });
-  };
 
   return (
     <div className="p-8">
+      {/* Header and Add Button */}
       <div
         className="flex flex-col sm:flex-row md:flex-row items-center justify-between p-4 md:ml-72 text-white rounded-lg"
         style={{
-          backgroundImage: "url('/img/dc.jpg')", // Usa la ruta relativa de la imagen dentro de public
-          backgroundSize: "cover", // Ajusta para que la imagen cubra todo el contenedor
-          backgroundPosition: "center", // Centra la imagen
-          borderRadius: "20px", // Cambia este valor para ajustar el redondeo
+          backgroundImage: "url('/img/dc.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          borderRadius: "20px",
         }}
       >
-        {/* Texto "Canción" */}
         <p
           className="text-center sm:text-left text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
           style={{
-            fontSize: "clamp(25px, 8vw, 60px)", // Hace que el tamaño de la fuente sea responsivo
-            margin: 0, // Asegura que no haya márgenes adicionales
+            fontSize: "clamp(25px, 8vw, 60px)",
+            margin: 0,
           }}
         >
           Grupo Musical
         </p>
-
-        {/* Botón "Agregar Canción" */}
         <div className="mt-4 sm:mt-0">
           <button
             onClick={openModalCrear}
             className="bg-[#0aa5a9] text-white px-6 py-3 rounded-lg transition-transform duration-300 hover:bg-[#067b80] hover:scale-105"
             style={{
-              fontSize: "18px", // Ajusta el tamaño de la letra aquí
+              fontSize: "18px",
             }}
           >
             Agregar Grupo
           </button>
         </div>
       </div>
-      {/* migajas de pan */}
+
+      {/* Breadcrumbs */}
       <div
-        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-blue-100 sm:bg-green-100 md:bg-yellow-100 lg:bg-red-100 xl:bg-purple-100 rounded-lg shadow-lg"
+        className="md:ml-72 p-4 mx-auto bg-blue-100 rounded-lg shadow-lg"
         style={{
-          backgroundColor: "#f1f8f9", // Color de fondo
-          borderRadius: "20px", // Bordes redondeados
-          marginTop: "20px", // Espaciado superior
-          marginBottom: "20px", // Espaciado inferior
-          height: "auto", // Ajusta el tamaño a su contenido
-          padding: "10px", // Ajusta el relleno si es necesario
+          backgroundColor: "#f1f8f9",
+          borderRadius: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          height: "auto",
+          padding: "10px",
         }}
       >
         <nav aria-label="breadcrumb">
@@ -175,12 +221,9 @@ const GrupoMusical = () => {
                 Inicio
               </Link>
             </li>
-
-            {/* Separador */}
             <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
               <span className="text-[#0aa5a9] px-2">/</span>
             </li>
-
             <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
               <span className="text-[#0aa5a9] px-4 py-2 rounded-lg transition duration-300 hover:bg-[#067b80] hover:text-white no-underline">
                 Grupo Musical
@@ -190,49 +233,53 @@ const GrupoMusical = () => {
         </nav>
       </div>
 
-      {/* Contenedor de búsqueda */}
+      {/* Search and Export Container */}
       <div
-        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-gray-100 rounded-lg shadow-lg"
+        className="md:ml-72 p-4 mx-auto bg-gray-100 rounded-lg shadow-lg"
         style={{
-          backgroundColor: "#f1f8f9", // Color de fondo
-          borderRadius: "20px", // Bordes redondeados
-          marginTop: "20px", // Espaciado superior
-          marginBottom: "20px", // Espaciado inferior
-          height: "auto", // Ajusta el tamaño a su contenido
-          padding: "10px", // Ajusta el relleno si es necesario
+          backgroundColor: "#f1f8f9",
+          borderRadius: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          height: "auto",
+          padding: "10px",
         }}
       >
         <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-4">
-          {/* Botón al lado izquierdo con hover más opaco */}
+          <div className="relative w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Buscar Grupo Musical..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="border border-gray-300 p-2 rounded-lg w-full pl-10"
+            />
+            <FiSearch className="absolute left-3 top-3 text-gray-500" />
+          </div>
           <button
-            className="bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-300 transition-colors duration-300 w-full sm:w-auto"
-            onClick={handleCardClick}
+            onClick={handleExportToExcel}
+            className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-300 transition-colors duration-300 flex items-center gap-2"
           >
-            Tarj.
+            <FiDownload />
+            Exportar a Excel
           </button>
-          {/* Input con tamaño dinámico */}
-          <input
-            type="text"
-            placeholder="Buscar Grupo Musical..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="border border-gray-300 p-2 rounded-lg w-full sm:w-auto sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
-          />
         </div>
       </div>
-      {/* Este es  el contedor  que  se encuentra debajo de la tabla de datos  */}
+
+      {/* Table of Grupos */}
       <div
-        className="flex-1 ml-0 md:ml-72  p-4 rounded-lg overflow-auto"
-        style={{
-          backgroundColor: "#f1f8f9  ", // Aplica el color de fondo aquí
-        }}
+        className="flex-1 ml-0 md:ml-72 p-4 rounded-lg overflow-auto"
+        style={{ backgroundColor: "rgba(241, 248, 249, 0.8)" }}
       >
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
+          <table
+            className="min-w-full table-auto rounded-lg shadow-md"
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+          >
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-2">Foto</th>
-                <th className="px-4 py-2">Nombre del Grupo Musical</th>
+                <th className="px-4 py-2">Nombre del Grupo</th>
                 <th className="px-4 py-2">Género Musical</th>
                 <th className="px-4 py-2">Descripción</th>
                 <th className="px-4 py-2">Plataforma</th>
@@ -242,7 +289,7 @@ const GrupoMusical = () => {
               </tr>
             </thead>
             <tbody>
-              {grupos.map((grupo, index) => (
+              {filteredGrupos.map((grupo, index) => (
                 <motion.tr
                   key={index}
                   initial={{ opacity: 0 }}
@@ -287,36 +334,41 @@ const GrupoMusical = () => {
                       {grupo.activo ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                 
-                    {/* estilos de los cruds */}
-                    <td className="px-4 py-2 flex space-x-2">
-                    <FiEye
-                      className="bg-gray-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                  <td className="px-4 py-2 flex space-x-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer"
                       onClick={() => openModalVer(index)}
-                    />
-
-                    <FiEdit
-                      className="bg-yellow-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                    >
+                      <FiEye className="text-white" size={20} />
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer"
                       onClick={() => openModalEditar(index)}
-                    />
+                    >
+                      <FiEdit className="text-white" size={20} />
+                    </motion.div>
                     {grupo.activo ? (
-                      <FiTrash2
-                      className="bg-red-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
-                      onClick={() => handleDeleteGrupo(index)}
-                      />
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() => handleDeleteGrupo(index)}
+                      >
+                        <FiTrash2 className="text-white" size={20} />
+                      </motion.div>
                     ) : (
-                      <FiRefreshCcw
-                      className="bg-[#17a2b8] text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
-                      onClick={() => handleRestoreGrupo(index)}
-                      />
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() => handleRestoreGrupo(index)}
+                      >
+                        <FiRefreshCcw className="text-white" size={20} />
+                      </motion.div>
                     )}
                   </td>
                 </motion.tr>
@@ -325,13 +377,14 @@ const GrupoMusical = () => {
           </table>
         </div>
 
-        {/* Modales */}
+        {/* Modals */}
         {modalCrear && (
           <ModalFormulario
             formData={formData}
             onClose={closeModalCrear}
             onChange={handleInputChange}
             onSave={handleAddGrupo}
+            errors={errors}
           />
         )}
 
@@ -341,6 +394,7 @@ const GrupoMusical = () => {
             onClose={closeModalEditar}
             onChange={handleInputChange}
             onSave={handleUpdateGrupo}
+            errors={errors}
           />
         )}
 
@@ -352,54 +406,59 @@ const GrupoMusical = () => {
   );
 };
 
-// ModalFormulario
-const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
+// ModalFormulario Component
+const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Formulario de Grupo Musical</h2>
         <div className="mb-4 text-center">
-  <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
-  <div>
-    <label
-      htmlFor="foto"
-      className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
-    >
-      Subir Imagen
-    </label>
-    <input
-      id="foto"
-      type="file"
-      name="foto"
-      onChange={onChange}
-      className="hidden"
-    />
-  </div>
-</div>
-
+          <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
+          <div>
+            <label
+              htmlFor="foto"
+              className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
+            >
+              Subir Imagen
+            </label>
+            <input
+              id="foto"
+              type="file"
+              name="foto"
+              onChange={onChange}
+              className="hidden"
+            />
+          </div>
+        </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Nombre del Grupo
-          </label>
+          <label className="block text-sm font-medium mb-1">Nombre del Grupo</label>
           <input
             type="text"
             name="nombreGrupo"
             value={formData.nombreGrupo}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.nombreGrupo ? "border-red-500" : ""
+            }`}
           />
+          {errors.nombreGrupo && (
+            <p className="text-red-500 text-sm mt-1">{errors.nombreGrupo}</p>
+          )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Género Musical
-          </label>
+          <label className="block text-sm font-medium mb-1">Género Musical</label>
           <input
             type="text"
             name="generoMusical"
             value={formData.generoMusical}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.generoMusical ? "border-red-500" : ""
+            }`}
           />
+          {errors.generoMusical && (
+            <p className="text-red-500 text-sm mt-1">{errors.generoMusical}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Descripción</label>
@@ -407,8 +466,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="descripcion"
             value={formData.descripcion}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.descripcion ? "border-red-500" : ""
+            }`}
           ></textarea>
+          {errors.descripcion && (
+            <p className="text-red-500 text-sm mt-1">{errors.descripcion}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Plataforma</label>
@@ -417,8 +481,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="plataforma"
             value={formData.plataforma}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.plataforma ? "border-red-500" : ""
+            }`}
           />
+          {errors.plataforma && (
+            <p className="text-red-500 text-sm mt-1">{errors.plataforma}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">URL</label>
@@ -427,75 +496,84 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="url"
             value={formData.url}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.url ? "border-red-500" : ""
+            }`}
           />
+          {errors.url && (
+            <p className="text-red-500 text-sm mt-1">{errors.url}</p>
+          )}
         </div>
         <div className="flex justify-end">
-  <button
-    onClick={onSave}
-    className="bg-blue-500 text-white p-2 rounded-lg mr-2"
-  >
-    Guardar
-  </button>
-  <button
-    onClick={onClose}
-    className="bg-red-400 text-white p-2 rounded-md"
-  >
-    Cancelar
-  </button>
-</div>
-
+          <button
+            onClick={onSave}
+            className="bg-blue-500 text-white p-2 rounded-lg mr-2"
+          >
+            Guardar
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-red-400 text-white p-2 rounded-md"
+          >
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-// ModalVer
+// ModalVer Component
 const ModalVer = ({ data, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Detalles del Grupo Musical</h2>
         <div className="mb-4">
-          <strong>Foto:</strong>
+          <label className="block text-sm font-medium mb-1">Foto</label>
           {data.foto ? (
             <img
               src={URL.createObjectURL(data.foto)}
-              alt="Foto del Grupo"
-              className="w-full h-48 object-cover rounded-md"
+              alt="Foto"
+              className="w-12 h-12 object-cover rounded-md"
             />
           ) : (
-            <p>Sin foto</p>
+            <span>Sin foto</span>
           )}
         </div>
-        <div className="mb-2">
-          <strong>Nombre del Grupo:</strong> {data.nombreGrupo}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Nombre del Grupo</label>
+          <p>{data.nombreGrupo}</p>
         </div>
-        <div className="mb-2">
-          <strong>Género Musical:</strong> {data.generoMusical}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Género Musical</label>
+          <p>{data.generoMusical}</p>
         </div>
-        <div className="mb-2">
-          <strong>Descripción:</strong> {data.descripcion}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Descripción</label>
+          <p>{data.descripcion}</p>
         </div>
-        <div className="mb-2">
-          <strong>Plataforma:</strong> {data.plataforma}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Plataforma</label>
+          <p>{data.plataforma}</p>
         </div>
-        <div className="mb-2">
-          <strong>URL:</strong>{" "}
-          <a
-            href={data.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 underline"
-          >
-            {data.url}
-          </a>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">URL</label>
+          <p>
+            <a
+              href={data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              {data.url}
+            </a>
+          </p>
         </div>
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="bg-purple-500 text-white p-2 rounded-md"
-
+            className="bg-purple-600 text-white p-2 rounded-md"
           >
             Cerrar
           </button>
@@ -510,6 +588,7 @@ ModalFormulario.propTypes = {
   onClose: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
 };
 
 ModalVer.propTypes = {
