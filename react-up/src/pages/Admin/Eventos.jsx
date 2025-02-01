@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import { FiEye, FiEdit, FiTrash2, FiRefreshCcw } from "react-icons/fi";
+import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiSearch, FiFilter, FiDownload } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import * as XLSX from "xlsx";
+
 const Eventos = () => {
   const [eventos, setEventos] = useState([
     {
@@ -47,21 +49,67 @@ const Eventos = () => {
     artistas: "",
   });
   const [currentEvento, setCurrentEvento] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [errors, setErrors] = useState({});
 
-  const openModalCrear = () => setModalCrear(true);
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSortByDate = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const handleExportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredEventos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Eventos");
+    XLSX.writeFile(workbook, "eventos.xlsx");
+  };
+
+  const filteredEventos = eventos
+    .filter((evento) =>
+      evento.nombreEvento.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      return sortOrder === "asc"
+        ? new Date(a.fecha) - new Date(b.fecha)
+        : new Date(b.fecha) - new Date(a.fecha);
+    });
+
+  const openModalCrear = () => {
+    setFormData({
+      foto: null,
+      nombreEvento: "",
+      generoMusical: "",
+      descripcion: "",
+      ubicacion: "",
+      fecha: "",
+      contacto: "",
+      capacidad: "",
+      artistas: "",
+    });
+    setErrors({});
+    setModalCrear(true);
+  };
+
   const closeModalCrear = () => setModalCrear(false);
-  const [searchTerm, setSearchTerm] = useState(""); // barra  de  busqueda
+
   const openModalEditar = (index) => {
     setCurrentEvento(index);
     setFormData(eventos[index]);
+    setErrors({});
     setModalEditar(true);
   };
+
   const closeModalEditar = () => setModalEditar(false);
 
   const openModalVer = (index) => {
     setCurrentEvento(index);
     setModalVer(true);
   };
+
   const closeModalVer = () => setModalVer(false);
 
   const handleInputChange = (e) => {
@@ -73,7 +121,22 @@ const Eventos = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nombreEvento) newErrors.nombreEvento = "El nombre del evento es obligatorio.";
+    if (!formData.generoMusical) newErrors.generoMusical = "El género musical es obligatorio.";
+    if (!formData.descripcion) newErrors.descripcion = "La descripción es obligatoria.";
+    if (!formData.ubicacion) newErrors.ubicacion = "La ubicación es obligatoria.";
+    if (!formData.fecha) newErrors.fecha = "La fecha es obligatoria.";
+    if (!formData.contacto) newErrors.contacto = "El contacto es obligatorio.";
+    if (!formData.capacidad) newErrors.capacidad = "La capacidad es obligatoria.";
+    if (!formData.artistas) newErrors.artistas = "Los artistas son obligatorios.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleAddEvento = () => {
+    if (!validateForm()) return;
     setEventos([...eventos, { ...formData, estado: true }]);
     Swal.fire({
       icon: "success",
@@ -84,6 +147,7 @@ const Eventos = () => {
   };
 
   const handleUpdateEvento = () => {
+    if (!validateForm()) return;
     const updatedEventos = [...eventos];
     updatedEventos[currentEvento] = { ...formData };
     setEventos(updatedEventos);
@@ -116,46 +180,37 @@ const Eventos = () => {
       text: "El evento fue restaurado y está activo nuevamente.",
     });
   };
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value); // barra  de busqueda
-  };
-  const handleCardClick = () => {
-    Swal.fire({
-      icon: "info",
-      title: "Función en desarrollo",
-      text: "Esta función aún no está implementada.", // funcion del boton tarj
-    });
-  };
 
   return (
-    <div className="p-8">
+    <div
+      className="p-8 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/fondo.gif')" }} // Fondo animado
+    >
+      {/* Encabezado y botón de agregar */}
       <div
         className="flex flex-col sm:flex-row md:flex-row items-center justify-between p-4 md:ml-72 text-white rounded-lg"
         style={{
-          backgroundImage: "url('/img/dc.jpg')", // Usa la ruta relativa de la imagen dentro de public
-          backgroundSize: "cover", // Ajusta para que la imagen cubra todo el contenedor
-          backgroundPosition: "center", // Centra la imagen
-          borderRadius: "20px", // Cambia este valor para ajustar el redondeo
+          backgroundImage: "url('/img/dc.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          borderRadius: "20px",
         }}
       >
-        {/* Texto "evento" */}
         <p
           className="text-center sm:text-left text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
           style={{
-            fontSize: "clamp(25px, 8vw, 60px)", // Hace que el tamaño de la fuente sea responsivo
-            margin: 0, // Asegura que no haya márgenes adicionales
+            fontSize: "clamp(25px, 8vw, 60px)",
+            margin: 0,
           }}
         >
           Evento
         </p>
-
-        {/* Botón "Agregar evento" */}
         <div className="mt-4 sm:mt-0">
           <button
             onClick={openModalCrear}
             className="bg-[#0aa5a9] text-white px-6 py-3 rounded-lg transition-transform duration-300 hover:bg-[#067b80] hover:scale-105"
             style={{
-              fontSize: "18px", // Ajusta el tamaño de la letra aquí
+              fontSize: "18px",
             }}
           >
             Agregar Evento
@@ -163,16 +218,16 @@ const Eventos = () => {
         </div>
       </div>
 
-      {/* migajas de pan */}
+      {/* Migajas de pan */}
       <div
-        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-blue-100 sm:bg-green-100 md:bg-yellow-100 lg:bg-red-100 xl:bg-purple-100 rounded-lg shadow-lg"
+        className="md:ml-72 p-4 mx-auto bg-blue-100 rounded-lg shadow-lg"
         style={{
-          backgroundColor: "#f1f8f9", // Color de fondo
-          borderRadius: "20px", // Bordes redondeados
-          marginTop: "20px", // Espaciado superior
-          marginBottom: "20px", // Espaciado inferior
-          height: "auto", // Ajusta el tamaño a su contenido
-          padding: "10px", // Ajusta el relleno si es necesario
+          backgroundColor: "#f1f8f9",
+          borderRadius: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          height: "auto",
+          padding: "10px",
         }}
       >
         <nav aria-label="breadcrumb">
@@ -185,12 +240,9 @@ const Eventos = () => {
                 Inicio
               </Link>
             </li>
-
-            {/* Separador */}
             <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
               <span className="text-[#0aa5a9] px-2">/</span>
             </li>
-
             <li className="text-sm sm:text-base md:text-lg lg:text-lg text-center py-2">
               <span className="text-[#0aa5a9] px-4 py-2 rounded-lg transition duration-300 hover:bg-[#067b80] hover:text-white no-underline">
                 Evento
@@ -200,45 +252,56 @@ const Eventos = () => {
         </nav>
       </div>
 
-      {/* Contenedor de búsqueda */}
+      {/* Contenedor de búsqueda, filtro y exportar */}
       <div
-        className="md:ml-72 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 mx-auto bg-gray-100 rounded-lg shadow-lg"
+        className="md:ml-72 p-4 mx-auto bg-gray-100 rounded-lg shadow-lg"
         style={{
-          backgroundColor: "#f1f8f9", // Color de fondo
-          borderRadius: "20px", // Bordes redondeados
-          marginTop: "20px", // Espaciado superior
-          marginBottom: "20px", // Espaciado inferior
-          height: "auto", // Ajusta el tamaño a su contenido
-          padding: "10px", // Ajusta el relleno si es necesario
+          backgroundColor: "#f1f8f9",
+          borderRadius: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          height: "auto",
+          padding: "10px",
         }}
       >
         <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-4">
-          {/* Botón al lado izquierdo con hover más opaco */}
+          <div className="relative w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Buscar Evento..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="border border-gray-300 p-2 rounded-lg w-full pl-10"
+            />
+            <FiSearch className="absolute left-3 top-3 text-gray-500" />
+          </div>
           <button
-            className="bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-300 transition-colors duration-300 w-full sm:w-auto"
-            onClick={handleCardClick}
+            onClick={handleSortByDate}
+            className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-300 transition-colors duration-300 flex items-center gap-2"
           >
-            Tarj.
+            <FiFilter />
+            {sortOrder === "asc" ? "Fecha Ascendente" : "Fecha Descendente"}
           </button>
-          {/* Input con tamaño dinámico */}
-          <input
-            type="text"
-            placeholder="Buscar Evento..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="border border-gray-300 p-2 rounded-lg w-full sm:w-auto sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
-          />
+          <button
+            onClick={handleExportToExcel}
+            className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-300 transition-colors duration-300 flex items-center gap-2"
+          >
+            <FiDownload />
+            Exportar a Excel
+          </button>
         </div>
       </div>
-      {/* Este es  el contedor  que  se encuentra debajo de la tabla de datos  */}
+
+      {/* Tabla de eventos */}
       <div
-        className="flex-1 ml-0 md:ml-72  p-4 rounded-lg overflow-auto"
-        style={{
-          backgroundColor: "#f1f8f9  ", // Aplica el color de fondo aquí
-        }}
+        className="flex-1 ml-0 md:ml-72 p-4 rounded-lg overflow-auto"
+        style={{ backgroundColor: "rgba(241, 248, 249, 0.8)" }}
       >
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto bg-white rounded-lg shadow-md">
+          <table
+            className="min-w-full table-auto rounded-lg shadow-md"
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+          >
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-2">Foto</th>
@@ -255,7 +318,7 @@ const Eventos = () => {
               </tr>
             </thead>
             <tbody>
-              {eventos.map((evento, index) => (
+              {filteredEventos.map((evento, index) => (
                 <motion.tr
                   key={index}
                   initial={{ opacity: 0 }}
@@ -294,36 +357,41 @@ const Eventos = () => {
                       {evento.estado ? "Activo" : "Inactivo"}
                     </span>
                   </td>
-                 
-                    {/* estilos de los cruds */}
-                    <td className="px-4 py-2 flex space-x-2">
-                    <FiEye
-                      className="bg-gray-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                  <td className="px-4 py-2 flex space-x-2">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer"
                       onClick={() => openModalVer(index)}
-                    />
-
-                    <FiEdit
-                      className="bg-yellow-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
+                    >
+                      <FiEye className="text-white" size={20} />
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer"
                       onClick={() => openModalEditar(index)}
-                    />
+                    >
+                      <FiEdit className="text-white" size={20} />
+                    </motion.div>
                     {evento.estado ? (
-                      <FiTrash2
-                      className="bg-red-500 text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
-                      onClick={() => handleDeleteEvento(index)}
-                      />
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() => handleDeleteEvento(index)}
+                      >
+                        <FiTrash2 className="text-white" size={20} />
+                      </motion.div>
                     ) : (
-                      <FiRefreshCcw
-                      className="bg-[#17a2b8] text-white p-3 w-10 h-10 flex items-center justify-center rounded shadow-md cursor-pointer hover:bg-[#067b80]"
-                      size={40} // Ajusta el tamaño del ícono aquí
-                      style={{ stroke: "#fff", strokeWidth: 3 }} // Agrega el grosor aquí
-                      onClick={() => handleRestoreEvento(index)}
-                      />
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() => handleRestoreEvento(index)}
+                      >
+                        <FiRefreshCcw className="text-white" size={20} />
+                      </motion.div>
                     )}
                   </td>
                 </motion.tr>
@@ -339,6 +407,7 @@ const Eventos = () => {
             onClose={closeModalCrear}
             onChange={handleInputChange}
             onSave={handleAddEvento}
+            errors={errors}
           />
         )}
 
@@ -348,6 +417,7 @@ const Eventos = () => {
             onClose={closeModalEditar}
             onChange={handleInputChange}
             onSave={handleUpdateEvento}
+            errors={errors}
           />
         )}
 
@@ -359,53 +429,58 @@ const Eventos = () => {
   );
 };
 
-const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
+const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Formulario de Evento</h2>
         <div className="mb-4 text-center">
-  <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
-  <div>
-    <label
-      htmlFor="foto"
-      className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
-    >
-      Subir Imagen
-    </label>
-    <input
-      id="foto"
-      type="file"
-      name="foto"
-      onChange={onChange}
-      className="hidden"
-    />
-  </div>
-</div>
-
+          <label className="block text-sm font-semibold text-gray-700 mb-2"></label>
+          <div>
+            <label
+              htmlFor="foto"
+              className="inline-block bg-[#067b80] text-white text-sm font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-[#056b6e] focus:ring-2 focus:ring-[#056b6e] focus:outline-none"
+            >
+              Subir Imagen
+            </label>
+            <input
+              id="foto"
+              type="file"
+              name="foto"
+              onChange={onChange}
+              className="hidden"
+            />
+          </div>
+        </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Nombre del Evento
-          </label>
+          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
           <input
             type="text"
             name="nombreEvento"
             value={formData.nombreEvento}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.nombreEvento ? "border-red-500" : ""
+            }`}
           />
+          {errors.nombreEvento && (
+            <p className="text-red-500 text-sm mt-1">{errors.nombreEvento}</p>
+          )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Género Musical
-          </label>
+          <label className="block text-sm font-medium mb-1">Género Musical</label>
           <input
             type="text"
             name="generoMusical"
             value={formData.generoMusical}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.generoMusical ? "border-red-500" : ""
+            }`}
           />
+          {errors.generoMusical && (
+            <p className="text-red-500 text-sm mt-1">{errors.generoMusical}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Descripción</label>
@@ -414,8 +489,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="descripcion"
             value={formData.descripcion}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.descripcion ? "border-red-500" : ""
+            }`}
           />
+          {errors.descripcion && (
+            <p className="text-red-500 text-sm mt-1">{errors.descripcion}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Ubicación</label>
@@ -424,8 +504,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="ubicacion"
             value={formData.ubicacion}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.ubicacion ? "border-red-500" : ""
+            }`}
           />
+          {errors.ubicacion && (
+            <p className="text-red-500 text-sm mt-1">{errors.ubicacion}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Fecha</label>
@@ -434,8 +519,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="fecha"
             value={formData.fecha}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.fecha ? "border-red-500" : ""
+            }`}
           />
+          {errors.fecha && (
+            <p className="text-red-500 text-sm mt-1">{errors.fecha}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Contacto</label>
@@ -444,8 +534,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="contacto"
             value={formData.contacto}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.contacto ? "border-red-500" : ""
+            }`}
           />
+          {errors.contacto && (
+            <p className="text-red-500 text-sm mt-1">{errors.contacto}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Capacidad</label>
@@ -454,8 +549,13 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="capacidad"
             value={formData.capacidad}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.capacidad ? "border-red-500" : ""
+            }`}
           />
+          {errors.capacidad && (
+            <p className="text-red-500 text-sm mt-1">{errors.capacidad}</p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Artistas</label>
@@ -464,24 +564,28 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave }) => {
             name="artistas"
             value={formData.artistas}
             onChange={onChange}
-            className="border border-gray-300 p-2 rounded-md w-full text-sm"
+            className={`w-full border px-3 py-2 rounded-lg ${
+              errors.artistas ? "border-red-500" : ""
+            }`}
           />
+          {errors.artistas && (
+            <p className="text-red-500 text-sm mt-1">{errors.artistas}</p>
+          )}
         </div>
         <div className="flex justify-end">
-  <button
-    onClick={onSave}
-    className="bg-blue-500 text-white p-2 rounded-lg mr-2"
-  >
-    Guardar
-  </button>
-  <button
-    onClick={onClose}
-    className="bg-red-400 text-white p-2 rounded-md"
-  >
-    Cerrar
-  </button>
-</div>
-
+          <button
+            onClick={onSave}
+            className="bg-blue-500 text-white p-2 rounded-lg mr-2"
+          >
+            Guardar
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-red-400 text-white p-2 rounded-md"
+          >
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -505,15 +609,11 @@ const ModalVer = ({ data, onClose }) => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Nombre del Evento
-          </label>
+          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
           <p>{data.nombreEvento}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Género Musical
-          </label>
+          <label className="block text-sm font-medium mb-1">Género Musical</label>
           <p>{data.generoMusical}</p>
         </div>
         <div className="mb-4">
@@ -541,13 +641,13 @@ const ModalVer = ({ data, onClose }) => {
           <p>{data.artistas}</p>
         </div>
         <div className="flex justify-end">
-        <button
-          onClick={onClose}
-          className="bg-purple-500 text-white p-2 rounded-md"
-        >
-          Cerrar
-        </button>
-      </div>
+          <button
+            onClick={onClose}
+            className="bg-purple-600 text-white p-2 rounded-md"
+          >
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -558,6 +658,7 @@ ModalFormulario.propTypes = {
   onClose: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
 };
 
 ModalVer.propTypes = {
