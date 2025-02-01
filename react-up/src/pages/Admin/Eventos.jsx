@@ -1,7 +1,14 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiSearch, FiFilter, FiDownload } from "react-icons/fi";
+import {
+  FiEye,
+  FiEdit,
+  FiTrash2,
+  FiRefreshCcw,
+  FiFilter,
+  FiDownload,
+} from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -123,14 +130,20 @@ const Eventos = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.nombreEvento) newErrors.nombreEvento = "El nombre del evento es obligatorio.";
-    if (!formData.generoMusical) newErrors.generoMusical = "El género musical es obligatorio.";
-    if (!formData.descripcion) newErrors.descripcion = "La descripción es obligatoria.";
-    if (!formData.ubicacion) newErrors.ubicacion = "La ubicación es obligatoria.";
+    if (!formData.nombreEvento)
+      newErrors.nombreEvento = "El nombre del evento es obligatorio.";
+    if (!formData.generoMusical)
+      newErrors.generoMusical = "El género musical es obligatorio.";
+    if (!formData.descripcion)
+      newErrors.descripcion = "La descripción es obligatoria.";
+    if (!formData.ubicacion)
+      newErrors.ubicacion = "La ubicación es obligatoria.";
     if (!formData.fecha) newErrors.fecha = "La fecha es obligatoria.";
     if (!formData.contacto) newErrors.contacto = "El contacto es obligatorio.";
-    if (!formData.capacidad) newErrors.capacidad = "La capacidad es obligatoria.";
-    if (!formData.artistas) newErrors.artistas = "Los artistas son obligatorios.";
+    if (!formData.capacidad)
+      newErrors.capacidad = "La capacidad es obligatoria.";
+    if (!formData.artistas)
+      newErrors.artistas = "Los artistas son obligatorios.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -265,7 +278,7 @@ const Eventos = () => {
         }}
       >
         <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-4">
-          <div className="relative w-full sm:w-auto">
+          <div className="w-full sm:w-auto">
             <input
               type="text"
               placeholder="Buscar Evento..."
@@ -273,7 +286,6 @@ const Eventos = () => {
               onChange={handleSearchChange}
               className="border border-gray-300 p-2 rounded-lg w-full pl-10"
             />
-            <FiSearch className="absolute left-3 top-3 text-gray-500" />
           </div>
           <button
             onClick={handleSortByDate}
@@ -453,7 +465,9 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
           </div>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
+          <label className="block text-sm font-medium mb-1">
+            Nombre del Evento
+          </label>
           <input
             type="text"
             name="nombreEvento"
@@ -468,7 +482,9 @@ const ModalFormulario = ({ formData, onClose, onChange, onSave, errors }) => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Género Musical</label>
+          <label className="block text-sm font-medium mb-1">
+            Género Musical
+          </label>
           <input
             type="text"
             name="generoMusical"
@@ -609,11 +625,15 @@ const ModalVer = ({ data, onClose }) => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Nombre del Evento</label>
+          <label className="block text-sm font-medium mb-1">
+            Nombre del Evento
+          </label>
           <p>{data.nombreEvento}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Género Musical</label>
+          <label className="block text-sm font-medium mb-1">
+            Género Musical
+          </label>
           <p>{data.generoMusical}</p>
         </div>
         <div className="mb-4">

@@ -40,7 +40,6 @@ const Dashboard = () => {
       imageDefault: "/img/dashboard-img/principal.jpg",
       imageHover: "/img/dashboard-img/Ecos del Pasado.jpg",
     },
-
   ];
 
   const data = {
@@ -87,7 +86,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex-1 ml-10 md:ml-72 mt-8 p-8 min-h-screen bg-cover bg-center bg-[url('/fondo.gif')]" >
+    <div className="flex-1 ml-10 md:ml-72 mt-8 p-8 min-h-screen bg-cover bg-center bg-[url('/fondo.gif')]">
       {/* Fondo blanco */}
       <div className="flex flex-col justify-center items-center min-h-screen  px-4">
         {/* Recuadro horizontal con imagen de fondo */}
@@ -106,7 +105,6 @@ const Dashboard = () => {
 
         {/* Contenedor para gráfico de pastel y calendario */}
         <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl">
-          
           {/* Estadísticas */}
           <motion.div
             className="bg-white p-4 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[350px]"
@@ -158,8 +156,8 @@ const Dashboard = () => {
 
         {/* Notificaciones */}
         <h2 className="text-center text-lg font-semibold w-full max-w-7xl mt-8 text-white">
-  Notificaciones de un evento
-</h2>
+          Notificaciones de un evento
+        </h2>
 
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {["11-01-2025", "12-02-2025", "15-03-2025"].map((date, index) => (
@@ -186,10 +184,9 @@ const Dashboard = () => {
 
         {/* Top */}
         <h2 className="text-left text-lg font-semibold w-full max-w-7xl mt-8 text-white">
-  Top Musical
-</h2>
+          Top Musical
+        </h2>
 
-        
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {songs.map((song) => (
             <motion.div
