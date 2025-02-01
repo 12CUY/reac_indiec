@@ -157,9 +157,10 @@ const Dashboard = () => {
         </div>
 
         {/* Notificaciones */}
-        <h2 className="text-center text-lg font-semibold w-full max-w-7xl mt-8">
-          Notificaciones de un evento
-        </h2>
+        <h2 className="text-center text-lg font-semibold w-full max-w-7xl mt-8 text-white">
+  Notificaciones de un evento
+</h2>
+
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {["11-01-2025", "12-02-2025", "15-03-2025"].map((date, index) => (
             <motion.div
@@ -184,9 +185,10 @@ const Dashboard = () => {
         </div>
 
         {/* Top */}
-        <h2 className="text-left text-lg font-semibold w-full max-w-7xl mt-8">
-          Top Musical
-        </h2>
+        <h2 className="text-left text-lg font-semibold w-full max-w-7xl mt-8 text-white">
+  Top Musical
+</h2>
+
         <div className="flex flex-wrap justify-center gap-4 w-full mt-2">
           {songs.map((song) => (
             <motion.div
