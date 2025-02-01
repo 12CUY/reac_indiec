@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiSearch, FiDownload } from "react-icons/fi";
+import { FiEye, FiEdit, FiTrash2, FiRefreshCcw, FiSearch, FiDownload, FiFilter } from "react-icons/fi";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -41,6 +41,7 @@ const GrupoMusical = () => {
   });
   const [currentGrupo, setCurrentGrupo] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterActive, setFilterActive] = useState("all"); // "all", "active", "inactive"
   const [errors, setErrors] = useState({});
 
   // Handle search input change
@@ -56,10 +57,25 @@ const GrupoMusical = () => {
     XLSX.writeFile(workbook, "grupos_musicales.xlsx");
   };
 
-  // Filter grupos based on search term
-  const filteredGrupos = grupos.filter((grupo) =>
-    grupo.nombreGrupo.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Handle filter change
+  const handleFilterChange = () => {
+    setFilterActive((prev) => {
+      if (prev === "all") return "active";
+      if (prev === "active") return "inactive";
+      return "all";
+    });
+  };
+
+  // Filter grupos based on search term and filter condition
+  const filteredGrupos = grupos
+    .filter((grupo) =>
+      grupo.nombreGrupo.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((grupo) => {
+      if (filterActive === "all") return true;
+      if (filterActive === "active") return grupo.activo;
+      return !grupo.activo;
+    });
 
   // Open and close modals
   const openModalCrear = () => {
@@ -166,7 +182,10 @@ const GrupoMusical = () => {
   };
 
   return (
-    <div className="p-8">
+    <div
+      className="p-8 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/fondo.gif')" }} // Fondo animado
+    >
       {/* Header and Add Button */}
       <div
         className="flex flex-col sm:flex-row md:flex-row items-center justify-between p-4 md:ml-72 text-white rounded-lg"
@@ -233,7 +252,7 @@ const GrupoMusical = () => {
         </nav>
       </div>
 
-      {/* Search and Export Container */}
+      {/* Search, Filter, and Export Container */}
       <div
         className="md:ml-72 p-4 mx-auto bg-gray-100 rounded-lg shadow-lg"
         style={{
@@ -256,6 +275,17 @@ const GrupoMusical = () => {
             />
             <FiSearch className="absolute left-3 top-3 text-gray-500" />
           </div>
+          <button
+            onClick={handleFilterChange}
+            className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-300 transition-colors duration-300 flex items-center gap-2"
+          >
+            <FiFilter />
+            {filterActive === "all"
+              ? "Todos"
+              : filterActive === "active"
+              ? "Activos"
+              : "Inactivos"}
+          </button>
           <button
             onClick={handleExportToExcel}
             className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-300 transition-colors duration-300 flex items-center gap-2"
