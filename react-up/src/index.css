@@ -1,3 +1,13 @@
+
+
+/* 
+    Archivo: /C:/Users/wiliam/Desktop/reac_indiec/react-up/src/index.css
+    Descripción:
+    Este archivo CSS utiliza Tailwind CSS para aplicar estilos base, componentes y utilidades.
+    - @tailwind base: Importa los estilos base de Tailwind CSS.
+    - @tailwind components: Importa los componentes predefinidos de Tailwind CSS.
+    - @tailwind utilities: Importa las utilidades de Tailwind CSS para clases de utilidad.
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
