@@ -1,24 +1,24 @@
 # Logs
-logs                    # Ignorar el directorio de logs
-*.log                   # Ignorar todos los archivos .log
-npm-debug.log*          # Ignorar archivos de log de depuración de npm
-yarn-debug.log*         # Ignorar archivos de log de depuración de yarn
-yarn-error.log*         # Ignorar archivos de log de errores de yarn
-pnpm-debug.log*         # Ignorar archivos de log de depuración de pnpm
-lerna-debug.log*        # Ignorar archivos de log de depuración de lerna
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Dependency directories
-node_modules            # Ignorar el directorio node_modules
-dist                    # Ignorar el directorio dist
-dist-ssr                # Ignorar el directorio dist-ssr
+node_modules
+dist
+dist-ssr
+*.local
 
 # Editor directories and files
-.vscode/*               # Ignorar todos los archivos y directorios dentro de .vscode
-!.vscode/extensions.json # No ignorar el archivo extensions.json dentro de .vscode
-.idea                   # Ignorar el directorio .idea
-.DS_Store               # Ignorar el archivo .DS_Store
-*.suo                   # Ignorar todos los archivos .suo
-*.ntvs*                 # Ignorar todos los archivos que comiencen con .ntvs
-*.njsproj               # Ignorar todos los archivos .njsproj
-*.sln                   # Ignorar todos los archivos .sln
-*.sw?                   # Ignorar todos los archivos que comiencen con .sw y tengan un solo carácter adicional
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

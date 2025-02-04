@@ -1,43 +1,20 @@
-# How to run the React system
-
-```sh
-# como correr el sistema de react+vite
-npm run dev
-```
-
-# Dependencies
-
-```sh
+# como correr el sistema de react 
+ npm run dev
 # dependencias
-npm i -g @railway/cli
-```
+npm i -g @railway/cli 
+# mirar el dominio 
 
-# View the domain
+railway domain 
 
-```sh
-# mirar el dominio
-railway domain
-```
+# mirar login 
 
-# Login
-
-```sh
-# mirar login
 railway login
-```
 
-# Deploy changes to Railway
-
-```sh
 # subir cambios en consola en el railway
+
 railway up
-```
 
-# Do not delete the package.json
+# no elminar el package.json 
 
-```json
-// no elminar el package.json
-{
     "start": "serve dist -s -n -L -p $PORT"
-}
-```
+    

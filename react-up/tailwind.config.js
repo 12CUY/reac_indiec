@@ -1,12 +1,13 @@
-/** @type {import('tailwindcss').Config} */ // Tipo de configuración de Tailwind CSS
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'], // Archivos donde Tailwind CSS buscará clases
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       cursor: {
         custom: "url('/cursor.png'), pointer", // Cursor personalizado
+        
       },
     },
   },
-  plugins: [], // Plugins de Tailwind CSS
+  plugins: [],
 };
